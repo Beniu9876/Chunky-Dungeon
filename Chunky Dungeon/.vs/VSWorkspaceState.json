@@ -2,9 +2,8 @@
   "ExpandedNodes": [
     "",
     "\\backgrounds",
-    "\\sprites",
-    "\\text"
+    "\\sprites"
   ],
-  "SelectedNode": "\\sprites\\doorLeft.c",
+  "SelectedNode": "\\main.c",
   "PreviewInSolutionExplorer": false
 }
