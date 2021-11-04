@@ -1,0 +1,2413 @@
+                              1 ;--------------------------------------------------------
+                              2 ; File Created by SDCC : FreeWare ANSI-C Compiler
+                              3 ; Version 2.2.1 Wed Nov 03 19:59:55 2021
+                              4 
+                              5 ;--------------------------------------------------------
+                              6 	.module lcc200680
+                              7 	
+                              8 ;--------------------------------------------------------
+                              9 ; Public variables in this module
+                             10 ;--------------------------------------------------------
+                             11 	.globl _main
+                             12 	.globl _pdelay
+                             13 	.globl _move_sprite
+                             14 	.globl _set_sprite_prop
+                             15 	.globl _set_sprite_tile
+                             16 	.globl _set_sprite_data
+                             17 	.globl _set_bkg_tiles
+                             18 	.globl _set_bkg_data
+                             19 	.globl _wait_vbl_done
+                             20 	.globl _doorLeft
+                             21 	.globl _door
+                             22 	.globl _main
+                             23 	.globl _background_map
+                             24 	.globl _background_data
+                             25 	.globl _pdelay
+                             26 ;--------------------------------------------------------
+                             27 ; Externals used
+                             28 ;--------------------------------------------------------
+                             29 	.globl _IE_REG
+                             30 	.globl _SVBK_REG
+                             31 	.globl _OCPD_REG
+                             32 	.globl _OCPS_REG
+                             33 	.globl _BCPD_REG
+                             34 	.globl _BCPS_REG
+                             35 	.globl _RP_REG
+                             36 	.globl _HDMA5_REG
+                             37 	.globl _HDMA4_REG
+                             38 	.globl _HDMA3_REG
+                             39 	.globl _HDMA2_REG
+                             40 	.globl _HDMA1_REG
+                             41 	.globl _VBK_REG
+                             42 	.globl _KEY1_REG
+                             43 	.globl _WX_REG
+                             44 	.globl _WY_REG
+                             45 	.globl _OBP1_REG
+                             46 	.globl _OBP0_REG
+                             47 	.globl _BGP_REG
+                             48 	.globl _DMA_REG
+                             49 	.globl _LYC_REG
+                             50 	.globl _LY_REG
+                             51 	.globl _SCX_REG
+                             52 	.globl _SCY_REG
+                             53 	.globl _STAT_REG
+                             54 	.globl _LCDC_REG
+                             55 	.globl _NR52_REG
+                             56 	.globl _NR51_REG
+                             57 	.globl _NR50_REG
+                             58 	.globl _NR44_REG
+                             59 	.globl _NR43_REG
+                             60 	.globl _NR42_REG
+                             61 	.globl _NR41_REG
+                             62 	.globl _NR34_REG
+                             63 	.globl _NR33_REG
+                             64 	.globl _NR32_REG
+                             65 	.globl _NR31_REG
+                             66 	.globl _NR30_REG
+                             67 	.globl _NR24_REG
+                             68 	.globl _NR23_REG
+                             69 	.globl _NR22_REG
+                             70 	.globl _NR21_REG
+                             71 	.globl _NR14_REG
+                             72 	.globl _NR13_REG
+                             73 	.globl _NR12_REG
+                             74 	.globl _NR11_REG
+                             75 	.globl _NR10_REG
+                             76 	.globl _IF_REG
+                             77 	.globl _TAC_REG
+                             78 	.globl _TMA_REG
+                             79 	.globl _TIMA_REG
+                             80 	.globl _DIV_REG
+                             81 	.globl _SC_REG
+                             82 	.globl _SB_REG
+                             83 	.globl _P1_REG
+                             84 	.globl _font_ibm_fixed
+                             85 	.globl _font_min
+                             86 	.globl _font_ibm
+                             87 	.globl _font_italic
+                             88 	.globl _font_spect
+                             89 	.globl __io_out
+                             90 	.globl __io_in
+                             91 	.globl __io_status
+                             92 	.globl _sys_time
+                             93 	.globl __cpu
+                             94 ;--------------------------------------------------------
+                             95 ; special function registers
+                             96 ;--------------------------------------------------------
+                             97 ;--------------------------------------------------------
+                             98 ; special function bits 
+                             99 ;--------------------------------------------------------
+                            100 ;--------------------------------------------------------
+                            101 ; internal ram data
+                            102 ;--------------------------------------------------------
+                            103 	.area _DATA
+   0000                     104 _door::
+   0000                     105 	.ds 64
+   0040                     106 _doorLeft::
+   0040                     107 	.ds 64
+                            108 ;--------------------------------------------------------
+                            109 ; overlayable items in internal ram 
+                            110 ;--------------------------------------------------------
+                            111 	.area _OVERLAY
+                            112 ;--------------------------------------------------------
+                            113 ; indirectly addressable internal ram data
+                            114 ;--------------------------------------------------------
+                            115 	.area _ISEG
+                            116 ;--------------------------------------------------------
+                            117 ; bit data
+                            118 ;--------------------------------------------------------
+                            119 	.area _BSEG
+                            120 ;--------------------------------------------------------
+                            121 ; external ram data
+                            122 ;--------------------------------------------------------
+                            123 	.area _XSEG
+                            124 ;--------------------------------------------------------
+                            125 ; global & static initialisations
+                            126 ;--------------------------------------------------------
+                            127 	.area _GSINIT
+                            128 	.area _GSFINAL
+                            129 	.area _GSINIT
+                            130 ;	main.c 98
+                            131 ; genAssign (pointer)
+   0000 11 00 00            132 	ld	de,#_door + 0
+   0003 3E 00               133 	ld	a,#0x00
+   0005 12                  134 	ld	(de),a
+                            135 ; genPlus
+                            136 ; genPlusIncr
+   0006 11 01 00            137 	ld	de,#_door + 0 + 1
+                            138 ; genAssign (pointer)
+   0009 3E 00               139 	ld	a,#0x00
+   000B 12                  140 	ld	(de),a
+                            141 ; genPlus
+                            142 ; genPlusIncr
+   000C 11 02 00            143 	ld	de,#_door + 0 + 2
+                            144 ; genAssign (pointer)
+   000F 3E 0F               145 	ld	a,#0x0F
+   0011 12                  146 	ld	(de),a
+                            147 ; genPlus
+                            148 ; genPlusIncr
+   0012 11 03 00            149 	ld	de,#_door + 0 + 3
+                            150 ; genAssign (pointer)
+   0015 3E 0F               151 	ld	a,#0x0F
+   0017 12                  152 	ld	(de),a
+                            153 ; genPlus
+                            154 ; genPlusIncr
+   0018 11 04 00            155 	ld	de,#_door + 0 + 4
+                            156 ; genAssign (pointer)
+   001B 3E 1B               157 	ld	a,#0x1B
+   001D 12                  158 	ld	(de),a
+                            159 ; genPlus
+                            160 ; genPlusIncr
+   001E 11 05 00            161 	ld	de,#_door + 0 + 5
+                            162 ; genAssign (pointer)
+   0021 3E 14               163 	ld	a,#0x14
+   0023 12                  164 	ld	(de),a
+                            165 ; genPlus
+                            166 ; genPlusIncr
+   0024 11 06 00            167 	ld	de,#_door + 0 + 6
+                            168 ; genAssign (pointer)
+   0027 3E 3F               169 	ld	a,#0x3F
+   0029 12                  170 	ld	(de),a
+                            171 ; genPlus
+                            172 ; genPlusIncr
+   002A 11 07 00            173 	ld	de,#_door + 0 + 7
+                            174 ; genAssign (pointer)
+   002D 3E 2F               175 	ld	a,#0x2F
+   002F 12                  176 	ld	(de),a
+                            177 ; genPlus
+                            178 ; genPlusIncr
+   0030 11 08 00            179 	ld	de,#_door + 0 + 8
+                            180 ; genAssign (pointer)
+   0033 3E 3D               181 	ld	a,#0x3D
+   0035 12                  182 	ld	(de),a
+                            183 ; genPlus
+                            184 ; genPlusIncr
+   0036 11 09 00            185 	ld	de,#_door + 0 + 9
+                            186 ; genAssign (pointer)
+   0039 3E 2F               187 	ld	a,#0x2F
+   003B 12                  188 	ld	(de),a
+                            189 ; genPlus
+                            190 ; genPlusIncr
+   003C 11 0A 00            191 	ld	de,#_door + 0 + 10
+                            192 ; genAssign (pointer)
+   003F 3E 5D               193 	ld	a,#0x5D
+   0041 12                  194 	ld	(de),a
+                            195 ; genPlus
+                            196 ; genPlusIncr
+   0042 11 0B 00            197 	ld	de,#_door + 0 + 11
+                            198 ; genAssign (pointer)
+   0045 3E 6F               199 	ld	a,#0x6F
+   0047 12                  200 	ld	(de),a
+                            201 ; genPlus
+                            202 ; genPlusIncr
+   0048 11 0C 00            203 	ld	de,#_door + 0 + 12
+                            204 ; genAssign (pointer)
+   004B 3E 5D               205 	ld	a,#0x5D
+   004D 12                  206 	ld	(de),a
+                            207 ; genPlus
+                            208 ; genPlusIncr
+   004E 11 0D 00            209 	ld	de,#_door + 0 + 13
+                            210 ; genAssign (pointer)
+   0051 3E 6F               211 	ld	a,#0x6F
+   0053 12                  212 	ld	(de),a
+                            213 ; genPlus
+                            214 ; genPlusIncr
+   0054 11 0E 00            215 	ld	de,#_door + 0 + 14
+                            216 ; genAssign (pointer)
+   0057 3E 5D               217 	ld	a,#0x5D
+   0059 12                  218 	ld	(de),a
+                            219 ; genPlus
+                            220 ; genPlusIncr
+   005A 11 0F 00            221 	ld	de,#_door + 0 + 15
+                            222 ; genAssign (pointer)
+   005D 3E 6F               223 	ld	a,#0x6F
+   005F 12                  224 	ld	(de),a
+                            225 ; genPlus
+                            226 ; genPlusIncr
+   0060 11 10 00            227 	ld	de,#_door + 0 + 16
+                            228 ; genAssign (pointer)
+   0063 3E 5D               229 	ld	a,#0x5D
+   0065 12                  230 	ld	(de),a
+                            231 ; genPlus
+                            232 ; genPlusIncr
+   0066 11 11 00            233 	ld	de,#_door + 0 + 17
+                            234 ; genAssign (pointer)
+   0069 3E 6F               235 	ld	a,#0x6F
+   006B 12                  236 	ld	(de),a
+                            237 ; genPlus
+                            238 ; genPlusIncr
+   006C 11 12 00            239 	ld	de,#_door + 0 + 18
+                            240 ; genAssign (pointer)
+   006F 3E 5F               241 	ld	a,#0x5F
+   0071 12                  242 	ld	(de),a
+                            243 ; genPlus
+                            244 ; genPlusIncr
+   0072 11 13 00            245 	ld	de,#_door + 0 + 19
+                            246 ; genAssign (pointer)
+   0075 3E 6F               247 	ld	a,#0x6F
+   0077 12                  248 	ld	(de),a
+                            249 ; genPlus
+                            250 ; genPlusIncr
+   0078 11 14 00            251 	ld	de,#_door + 0 + 20
+                            252 ; genAssign (pointer)
+   007B 3E 5B               253 	ld	a,#0x5B
+   007D 12                  254 	ld	(de),a
+                            255 ; genPlus
+                            256 ; genPlusIncr
+   007E 11 15 00            257 	ld	de,#_door + 0 + 21
+                            258 ; genAssign (pointer)
+   0081 3E 64               259 	ld	a,#0x64
+   0083 12                  260 	ld	(de),a
+                            261 ; genPlus
+                            262 ; genPlusIncr
+   0084 11 16 00            263 	ld	de,#_door + 0 + 22
+                            264 ; genAssign (pointer)
+   0087 3E 5B               265 	ld	a,#0x5B
+   0089 12                  266 	ld	(de),a
+                            267 ; genPlus
+                            268 ; genPlusIncr
+   008A 11 17 00            269 	ld	de,#_door + 0 + 23
+                            270 ; genAssign (pointer)
+   008D 3E 64               271 	ld	a,#0x64
+   008F 12                  272 	ld	(de),a
+                            273 ; genPlus
+                            274 ; genPlusIncr
+   0090 11 18 00            275 	ld	de,#_door + 0 + 24
+                            276 ; genAssign (pointer)
+   0093 3E 5B               277 	ld	a,#0x5B
+   0095 12                  278 	ld	(de),a
+                            279 ; genPlus
+                            280 ; genPlusIncr
+   0096 11 19 00            281 	ld	de,#_door + 0 + 25
+                            282 ; genAssign (pointer)
+   0099 3E 64               283 	ld	a,#0x64
+   009B 12                  284 	ld	(de),a
+                            285 ; genPlus
+                            286 ; genPlusIncr
+   009C 11 1A 00            287 	ld	de,#_door + 0 + 26
+                            288 ; genAssign (pointer)
+   009F 3E 5B               289 	ld	a,#0x5B
+   00A1 12                  290 	ld	(de),a
+                            291 ; genPlus
+                            292 ; genPlusIncr
+   00A2 11 1B 00            293 	ld	de,#_door + 0 + 27
+                            294 ; genAssign (pointer)
+   00A5 3E 64               295 	ld	a,#0x64
+   00A7 12                  296 	ld	(de),a
+                            297 ; genPlus
+                            298 ; genPlusIncr
+   00A8 11 1C 00            299 	ld	de,#_door + 0 + 28
+                            300 ; genAssign (pointer)
+   00AB 3E 5B               301 	ld	a,#0x5B
+   00AD 12                  302 	ld	(de),a
+                            303 ; genPlus
+                            304 ; genPlusIncr
+   00AE 11 1D 00            305 	ld	de,#_door + 0 + 29
+                            306 ; genAssign (pointer)
+   00B1 3E 64               307 	ld	a,#0x64
+   00B3 12                  308 	ld	(de),a
+                            309 ; genPlus
+                            310 ; genPlusIncr
+   00B4 11 1E 00            311 	ld	de,#_door + 0 + 30
+                            312 ; genAssign (pointer)
+   00B7 3E 49               313 	ld	a,#0x49
+   00B9 12                  314 	ld	(de),a
+                            315 ; genPlus
+                            316 ; genPlusIncr
+   00BA 11 1F 00            317 	ld	de,#_door + 0 + 31
+                            318 ; genAssign (pointer)
+   00BD 3E 76               319 	ld	a,#0x76
+   00BF 12                  320 	ld	(de),a
+                            321 ; genPlus
+                            322 ; genPlusIncr
+   00C0 11 20 00            323 	ld	de,#_door + 0 + 32
+                            324 ; genAssign (pointer)
+   00C3 3E 00               325 	ld	a,#0x00
+   00C5 12                  326 	ld	(de),a
+                            327 ; genPlus
+                            328 ; genPlusIncr
+   00C6 11 21 00            329 	ld	de,#_door + 0 + 33
+                            330 ; genAssign (pointer)
+   00C9 3E 00               331 	ld	a,#0x00
+   00CB 12                  332 	ld	(de),a
+                            333 ; genPlus
+                            334 ; genPlusIncr
+   00CC 11 22 00            335 	ld	de,#_door + 0 + 34
+                            336 ; genAssign (pointer)
+   00CF 3E F0               337 	ld	a,#0xF0
+   00D1 12                  338 	ld	(de),a
+                            339 ; genPlus
+                            340 ; genPlusIncr
+   00D2 11 23 00            341 	ld	de,#_door + 0 + 35
+                            342 ; genAssign (pointer)
+   00D5 3E F0               343 	ld	a,#0xF0
+   00D7 12                  344 	ld	(de),a
+                            345 ; genPlus
+                            346 ; genPlusIncr
+   00D8 11 24 00            347 	ld	de,#_door + 0 + 36
+                            348 ; genAssign (pointer)
+   00DB 3E 68               349 	ld	a,#0x68
+   00DD 12                  350 	ld	(de),a
+                            351 ; genPlus
+                            352 ; genPlusIncr
+   00DE 11 25 00            353 	ld	de,#_door + 0 + 37
+                            354 ; genAssign (pointer)
+   00E1 3E 98               355 	ld	a,#0x98
+   00E3 12                  356 	ld	(de),a
+                            357 ; genPlus
+                            358 ; genPlusIncr
+   00E4 11 26 00            359 	ld	de,#_door + 0 + 38
+                            360 ; genAssign (pointer)
+   00E7 3E FC               361 	ld	a,#0xFC
+   00E9 12                  362 	ld	(de),a
+                            363 ; genPlus
+                            364 ; genPlusIncr
+   00EA 11 27 00            365 	ld	de,#_door + 0 + 39
+                            366 ; genAssign (pointer)
+   00ED 3E F4               367 	ld	a,#0xF4
+   00EF 12                  368 	ld	(de),a
+                            369 ; genPlus
+                            370 ; genPlusIncr
+   00F0 11 28 00            371 	ld	de,#_door + 0 + 40
+                            372 ; genAssign (pointer)
+   00F3 3E 5C               373 	ld	a,#0x5C
+   00F5 12                  374 	ld	(de),a
+                            375 ; genPlus
+                            376 ; genPlusIncr
+   00F6 11 29 00            377 	ld	de,#_door + 0 + 41
+                            378 ; genAssign (pointer)
+   00F9 3E F4               379 	ld	a,#0xF4
+   00FB 12                  380 	ld	(de),a
+                            381 ; genPlus
+                            382 ; genPlusIncr
+   00FC 11 2A 00            383 	ld	de,#_door + 0 + 42
+                            384 ; genAssign (pointer)
+   00FF 3E 5E               385 	ld	a,#0x5E
+   0101 12                  386 	ld	(de),a
+                            387 ; genPlus
+                            388 ; genPlusIncr
+   0102 11 2B 00            389 	ld	de,#_door + 0 + 43
+                            390 ; genAssign (pointer)
+   0105 3E F2               391 	ld	a,#0xF2
+   0107 12                  392 	ld	(de),a
+                            393 ; genPlus
+                            394 ; genPlusIncr
+   0108 11 2C 00            395 	ld	de,#_door + 0 + 44
+                            396 ; genAssign (pointer)
+   010B 3E 5E               397 	ld	a,#0x5E
+   010D 12                  398 	ld	(de),a
+                            399 ; genPlus
+                            400 ; genPlusIncr
+   010E 11 2D 00            401 	ld	de,#_door + 0 + 45
+                            402 ; genAssign (pointer)
+   0111 3E F2               403 	ld	a,#0xF2
+   0113 12                  404 	ld	(de),a
+                            405 ; genPlus
+                            406 ; genPlusIncr
+   0114 11 2E 00            407 	ld	de,#_door + 0 + 46
+                            408 ; genAssign (pointer)
+   0117 3E 5E               409 	ld	a,#0x5E
+   0119 12                  410 	ld	(de),a
+                            411 ; genPlus
+                            412 ; genPlusIncr
+   011A 11 2F 00            413 	ld	de,#_door + 0 + 47
+                            414 ; genAssign (pointer)
+   011D 3E F2               415 	ld	a,#0xF2
+   011F 12                  416 	ld	(de),a
+                            417 ; genPlus
+                            418 ; genPlusIncr
+   0120 11 30 00            419 	ld	de,#_door + 0 + 48
+                            420 ; genAssign (pointer)
+   0123 3E 5E               421 	ld	a,#0x5E
+   0125 12                  422 	ld	(de),a
+                            423 ; genPlus
+                            424 ; genPlusIncr
+   0126 11 31 00            425 	ld	de,#_door + 0 + 49
+                            426 ; genAssign (pointer)
+   0129 3E F2               427 	ld	a,#0xF2
+   012B 12                  428 	ld	(de),a
+                            429 ; genPlus
+                            430 ; genPlusIncr
+   012C 11 32 00            431 	ld	de,#_door + 0 + 50
+                            432 ; genAssign (pointer)
+   012F 3E FE               433 	ld	a,#0xFE
+   0131 12                  434 	ld	(de),a
+                            435 ; genPlus
+                            436 ; genPlusIncr
+   0132 11 33 00            437 	ld	de,#_door + 0 + 51
+                            438 ; genAssign (pointer)
+   0135 3E F2               439 	ld	a,#0xF2
+   0137 12                  440 	ld	(de),a
+                            441 ; genPlus
+                            442 ; genPlusIncr
+   0138 11 34 00            443 	ld	de,#_door + 0 + 52
+                            444 ; genAssign (pointer)
+   013B 3E 6E               445 	ld	a,#0x6E
+   013D 12                  446 	ld	(de),a
+                            447 ; genPlus
+                            448 ; genPlusIncr
+   013E 11 35 00            449 	ld	de,#_door + 0 + 53
+                            450 ; genAssign (pointer)
+   0141 3E 92               451 	ld	a,#0x92
+   0143 12                  452 	ld	(de),a
+                            453 ; genPlus
+                            454 ; genPlusIncr
+   0144 11 36 00            455 	ld	de,#_door + 0 + 54
+                            456 ; genAssign (pointer)
+   0147 3E 7E               457 	ld	a,#0x7E
+   0149 12                  458 	ld	(de),a
+                            459 ; genPlus
+                            460 ; genPlusIncr
+   014A 11 37 00            461 	ld	de,#_door + 0 + 55
+                            462 ; genAssign (pointer)
+   014D 3E BA               463 	ld	a,#0xBA
+   014F 12                  464 	ld	(de),a
+                            465 ; genPlus
+                            466 ; genPlusIncr
+   0150 11 38 00            467 	ld	de,#_door + 0 + 56
+                            468 ; genAssign (pointer)
+   0153 3E 6E               469 	ld	a,#0x6E
+   0155 12                  470 	ld	(de),a
+                            471 ; genPlus
+                            472 ; genPlusIncr
+   0156 11 39 00            473 	ld	de,#_door + 0 + 57
+                            474 ; genAssign (pointer)
+   0159 3E 9A               475 	ld	a,#0x9A
+   015B 12                  476 	ld	(de),a
+                            477 ; genPlus
+                            478 ; genPlusIncr
+   015C 11 3A 00            479 	ld	de,#_door + 0 + 58
+                            480 ; genAssign (pointer)
+   015F 3E 6E               481 	ld	a,#0x6E
+   0161 12                  482 	ld	(de),a
+                            483 ; genPlus
+                            484 ; genPlusIncr
+   0162 11 3B 00            485 	ld	de,#_door + 0 + 59
+                            486 ; genAssign (pointer)
+   0165 3E 92               487 	ld	a,#0x92
+   0167 12                  488 	ld	(de),a
+                            489 ; genPlus
+                            490 ; genPlusIncr
+   0168 11 3C 00            491 	ld	de,#_door + 0 + 60
+                            492 ; genAssign (pointer)
+   016B 3E 6E               493 	ld	a,#0x6E
+   016D 12                  494 	ld	(de),a
+                            495 ; genPlus
+                            496 ; genPlusIncr
+   016E 11 3D 00            497 	ld	de,#_door + 0 + 61
+                            498 ; genAssign (pointer)
+   0171 3E 92               499 	ld	a,#0x92
+   0173 12                  500 	ld	(de),a
+                            501 ; genPlus
+                            502 ; genPlusIncr
+   0174 11 3E 00            503 	ld	de,#_door + 0 + 62
+                            504 ; genAssign (pointer)
+   0177 3E 26               505 	ld	a,#0x26
+   0179 12                  506 	ld	(de),a
+                            507 ; genPlus
+                            508 ; genPlusIncr
+   017A 11 3F 00            509 	ld	de,#_door + 0 + 63
+                            510 ; genAssign (pointer)
+   017D 3E DA               511 	ld	a,#0xDA
+   017F 12                  512 	ld	(de),a
+                            513 ;	main.c 98
+                            514 ; genAssign (pointer)
+   0180 11 40 00            515 	ld	de,#_doorLeft + 0
+   0183 3E 00               516 	ld	a,#0x00
+   0185 12                  517 	ld	(de),a
+                            518 ; genPlus
+                            519 ; genPlusIncr
+   0186 11 41 00            520 	ld	de,#_doorLeft + 0 + 1
+                            521 ; genAssign (pointer)
+   0189 3E 00               522 	ld	a,#0x00
+   018B 12                  523 	ld	(de),a
+                            524 ; genPlus
+                            525 ; genPlusIncr
+   018C 11 42 00            526 	ld	de,#_doorLeft + 0 + 2
+                            527 ; genAssign (pointer)
+   018F 3E 07               528 	ld	a,#0x07
+   0191 12                  529 	ld	(de),a
+                            530 ; genPlus
+                            531 ; genPlusIncr
+   0192 11 43 00            532 	ld	de,#_doorLeft + 0 + 3
+                            533 ; genAssign (pointer)
+   0195 3E 07               534 	ld	a,#0x07
+   0197 12                  535 	ld	(de),a
+                            536 ; genPlus
+                            537 ; genPlusIncr
+   0198 11 44 00            538 	ld	de,#_doorLeft + 0 + 4
+                            539 ; genAssign (pointer)
+   019B 3E 1F               540 	ld	a,#0x1F
+   019D 12                  541 	ld	(de),a
+                            542 ; genPlus
+                            543 ; genPlusIncr
+   019E 11 45 00            544 	ld	de,#_doorLeft + 0 + 5
+                            545 ; genAssign (pointer)
+   01A1 3E 18               546 	ld	a,#0x18
+   01A3 12                  547 	ld	(de),a
+                            548 ; genPlus
+                            549 ; genPlusIncr
+   01A4 11 46 00            550 	ld	de,#_doorLeft + 0 + 6
+                            551 ; genAssign (pointer)
+   01A7 3E 3F               552 	ld	a,#0x3F
+   01A9 12                  553 	ld	(de),a
+                            554 ; genPlus
+                            555 ; genPlusIncr
+   01AA 11 47 00            556 	ld	de,#_doorLeft + 0 + 7
+                            557 ; genAssign (pointer)
+   01AD 3E 20               558 	ld	a,#0x20
+   01AF 12                  559 	ld	(de),a
+                            560 ; genPlus
+                            561 ; genPlusIncr
+   01B0 11 48 00            562 	ld	de,#_doorLeft + 0 + 8
+                            563 ; genAssign (pointer)
+   01B3 3E 5F               564 	ld	a,#0x5F
+   01B5 12                  565 	ld	(de),a
+                            566 ; genPlus
+                            567 ; genPlusIncr
+   01B6 11 49 00            568 	ld	de,#_doorLeft + 0 + 9
+                            569 ; genAssign (pointer)
+   01B9 3E 7F               570 	ld	a,#0x7F
+   01BB 12                  571 	ld	(de),a
+                            572 ; genPlus
+                            573 ; genPlusIncr
+   01BC 11 4A 00            574 	ld	de,#_doorLeft + 0 + 10
+                            575 ; genAssign (pointer)
+   01BF 3E 70               576 	ld	a,#0x70
+   01C1 12                  577 	ld	(de),a
+                            578 ; genPlus
+                            579 ; genPlusIncr
+   01C2 11 4B 00            580 	ld	de,#_doorLeft + 0 + 11
+                            581 ; genAssign (pointer)
+   01C5 3E 5F               582 	ld	a,#0x5F
+   01C7 12                  583 	ld	(de),a
+                            584 ; genPlus
+                            585 ; genPlusIncr
+   01C8 11 4C 00            586 	ld	de,#_doorLeft + 0 + 12
+                            587 ; genAssign (pointer)
+   01CB 3E 7F               588 	ld	a,#0x7F
+   01CD 12                  589 	ld	(de),a
+                            590 ; genPlus
+                            591 ; genPlusIncr
+   01CE 11 4D 00            592 	ld	de,#_doorLeft + 0 + 13
+                            593 ; genAssign (pointer)
+   01D1 3E 5F               594 	ld	a,#0x5F
+   01D3 12                  595 	ld	(de),a
+                            596 ; genPlus
+                            597 ; genPlusIncr
+   01D4 11 4E 00            598 	ld	de,#_doorLeft + 0 + 14
+                            599 ; genAssign (pointer)
+   01D7 3E 50               600 	ld	a,#0x50
+   01D9 12                  601 	ld	(de),a
+                            602 ; genPlus
+                            603 ; genPlusIncr
+   01DA 11 4F 00            604 	ld	de,#_doorLeft + 0 + 15
+                            605 ; genAssign (pointer)
+   01DD 3E 7F               606 	ld	a,#0x7F
+   01DF 12                  607 	ld	(de),a
+                            608 ; genPlus
+                            609 ; genPlusIncr
+   01E0 11 50 00            610 	ld	de,#_doorLeft + 0 + 16
+                            611 ; genAssign (pointer)
+   01E3 3E 7F               612 	ld	a,#0x7F
+   01E5 12                  613 	ld	(de),a
+                            614 ; genPlus
+                            615 ; genPlusIncr
+   01E6 11 51 00            616 	ld	de,#_doorLeft + 0 + 17
+                            617 ; genAssign (pointer)
+   01E9 3E 5F               618 	ld	a,#0x5F
+   01EB 12                  619 	ld	(de),a
+                            620 ; genPlus
+                            621 ; genPlusIncr
+   01EC 11 52 00            622 	ld	de,#_doorLeft + 0 + 18
+                            623 ; genAssign (pointer)
+   01EF 3E 70               624 	ld	a,#0x70
+   01F1 12                  625 	ld	(de),a
+                            626 ; genPlus
+                            627 ; genPlusIncr
+   01F2 11 53 00            628 	ld	de,#_doorLeft + 0 + 19
+                            629 ; genAssign (pointer)
+   01F5 3E 5F               630 	ld	a,#0x5F
+   01F7 12                  631 	ld	(de),a
+                            632 ; genPlus
+                            633 ; genPlusIncr
+   01F8 11 54 00            634 	ld	de,#_doorLeft + 0 + 20
+                            635 ; genAssign (pointer)
+   01FB 3E 5F               636 	ld	a,#0x5F
+   01FD 12                  637 	ld	(de),a
+                            638 ; genPlus
+                            639 ; genPlusIncr
+   01FE 11 55 00            640 	ld	de,#_doorLeft + 0 + 21
+                            641 ; genAssign (pointer)
+   0201 3E 7F               642 	ld	a,#0x7F
+   0203 12                  643 	ld	(de),a
+                            644 ; genPlus
+                            645 ; genPlusIncr
+   0204 11 56 00            646 	ld	de,#_doorLeft + 0 + 22
+                            647 ; genAssign (pointer)
+   0207 3E 7F               648 	ld	a,#0x7F
+   0209 12                  649 	ld	(de),a
+                            650 ; genPlus
+                            651 ; genPlusIncr
+   020A 11 57 00            652 	ld	de,#_doorLeft + 0 + 23
+                            653 ; genAssign (pointer)
+   020D 3E 5F               654 	ld	a,#0x5F
+   020F 12                  655 	ld	(de),a
+                            656 ; genPlus
+                            657 ; genPlusIncr
+   0210 11 58 00            658 	ld	de,#_doorLeft + 0 + 24
+                            659 ; genAssign (pointer)
+   0213 3E 3F               660 	ld	a,#0x3F
+   0215 12                  661 	ld	(de),a
+                            662 ; genPlus
+                            663 ; genPlusIncr
+   0216 11 59 00            664 	ld	de,#_doorLeft + 0 + 25
+                            665 ; genAssign (pointer)
+   0219 3E 20               666 	ld	a,#0x20
+   021B 12                  667 	ld	(de),a
+                            668 ; genPlus
+                            669 ; genPlusIncr
+   021C 11 5A 00            670 	ld	de,#_doorLeft + 0 + 26
+                            671 ; genAssign (pointer)
+   021F 3E 18               672 	ld	a,#0x18
+   0221 12                  673 	ld	(de),a
+                            674 ; genPlus
+                            675 ; genPlusIncr
+   0222 11 5B 00            676 	ld	de,#_doorLeft + 0 + 27
+                            677 ; genAssign (pointer)
+   0225 3E 1F               678 	ld	a,#0x1F
+   0227 12                  679 	ld	(de),a
+                            680 ; genPlus
+                            681 ; genPlusIncr
+   0228 11 5C 00            682 	ld	de,#_doorLeft + 0 + 28
+                            683 ; genAssign (pointer)
+   022B 3E 07               684 	ld	a,#0x07
+   022D 12                  685 	ld	(de),a
+                            686 ; genPlus
+                            687 ; genPlusIncr
+   022E 11 5D 00            688 	ld	de,#_doorLeft + 0 + 29
+                            689 ; genAssign (pointer)
+   0231 3E 07               690 	ld	a,#0x07
+   0233 12                  691 	ld	(de),a
+                            692 ; genPlus
+                            693 ; genPlusIncr
+   0234 11 5E 00            694 	ld	de,#_doorLeft + 0 + 30
+                            695 ; genAssign (pointer)
+   0237 3E 00               696 	ld	a,#0x00
+   0239 12                  697 	ld	(de),a
+                            698 ; genPlus
+                            699 ; genPlusIncr
+   023A 11 5F 00            700 	ld	de,#_doorLeft + 0 + 31
+                            701 ; genAssign (pointer)
+   023D 3E 00               702 	ld	a,#0x00
+   023F 12                  703 	ld	(de),a
+                            704 ; genPlus
+                            705 ; genPlusIncr
+   0240 11 60 00            706 	ld	de,#_doorLeft + 0 + 32
+                            707 ; genAssign (pointer)
+   0243 3E 00               708 	ld	a,#0x00
+   0245 12                  709 	ld	(de),a
+                            710 ; genPlus
+                            711 ; genPlusIncr
+   0246 11 61 00            712 	ld	de,#_doorLeft + 0 + 33
+                            713 ; genAssign (pointer)
+   0249 3E 00               714 	ld	a,#0x00
+   024B 12                  715 	ld	(de),a
+                            716 ; genPlus
+                            717 ; genPlusIncr
+   024C 11 62 00            718 	ld	de,#_doorLeft + 0 + 34
+                            719 ; genAssign (pointer)
+   024F 3E FF               720 	ld	a,#0xFF
+   0251 12                  721 	ld	(de),a
+                            722 ; genPlus
+                            723 ; genPlusIncr
+   0252 11 63 00            724 	ld	de,#_doorLeft + 0 + 35
+                            725 ; genAssign (pointer)
+   0255 3E FF               726 	ld	a,#0xFF
+   0257 12                  727 	ld	(de),a
+                            728 ; genPlus
+                            729 ; genPlusIncr
+   0258 11 64 00            730 	ld	de,#_doorLeft + 0 + 36
+                            731 ; genAssign (pointer)
+   025B 3E FF               732 	ld	a,#0xFF
+   025D 12                  733 	ld	(de),a
+                            734 ; genPlus
+                            735 ; genPlusIncr
+   025E 11 65 00            736 	ld	de,#_doorLeft + 0 + 37
+                            737 ; genAssign (pointer)
+   0261 3E 00               738 	ld	a,#0x00
+   0263 12                  739 	ld	(de),a
+                            740 ; genPlus
+                            741 ; genPlusIncr
+   0264 11 66 00            742 	ld	de,#_doorLeft + 0 + 38
+                            743 ; genAssign (pointer)
+   0267 3E FE               744 	ld	a,#0xFE
+   0269 12                  745 	ld	(de),a
+                            746 ; genPlus
+                            747 ; genPlusIncr
+   026A 11 67 00            748 	ld	de,#_doorLeft + 0 + 39
+                            749 ; genAssign (pointer)
+   026D 3E 19               750 	ld	a,#0x19
+   026F 12                  751 	ld	(de),a
+                            752 ; genPlus
+                            753 ; genPlusIncr
+   0270 11 68 00            754 	ld	de,#_doorLeft + 0 + 40
+                            755 ; genAssign (pointer)
+   0273 3E D0               756 	ld	a,#0xD0
+   0275 12                  757 	ld	(de),a
+                            758 ; genPlus
+                            759 ; genPlusIncr
+   0276 11 69 00            760 	ld	de,#_doorLeft + 0 + 41
+                            761 ; genAssign (pointer)
+   0279 3E FF               762 	ld	a,#0xFF
+   027B 12                  763 	ld	(de),a
+                            764 ; genPlus
+                            765 ; genPlusIncr
+   027C 11 6A 00            766 	ld	de,#_doorLeft + 0 + 42
+                            767 ; genAssign (pointer)
+   027F 3E 7F               768 	ld	a,#0x7F
+   0281 12                  769 	ld	(de),a
+                            770 ; genPlus
+                            771 ; genPlusIncr
+   0282 11 6B 00            772 	ld	de,#_doorLeft + 0 + 43
+                            773 ; genAssign (pointer)
+   0285 3E D0               774 	ld	a,#0xD0
+   0287 12                  775 	ld	(de),a
+                            776 ; genPlus
+                            777 ; genPlusIncr
+   0288 11 6C 00            778 	ld	de,#_doorLeft + 0 + 44
+                            779 ; genAssign (pointer)
+   028B 3E FE               780 	ld	a,#0xFE
+   028D 12                  781 	ld	(de),a
+                            782 ; genPlus
+                            783 ; genPlusIncr
+   028E 11 6D 00            784 	ld	de,#_doorLeft + 0 + 45
+                            785 ; genAssign (pointer)
+   0291 3E C1               786 	ld	a,#0xC1
+   0293 12                  787 	ld	(de),a
+                            788 ; genPlus
+                            789 ; genPlusIncr
+   0294 11 6E 00            790 	ld	de,#_doorLeft + 0 + 46
+                            791 ; genAssign (pointer)
+   0297 3E 40               792 	ld	a,#0x40
+   0299 12                  793 	ld	(de),a
+                            794 ; genPlus
+                            795 ; genPlusIncr
+   029A 11 6F 00            796 	ld	de,#_doorLeft + 0 + 47
+                            797 ; genAssign (pointer)
+   029D 3E FF               798 	ld	a,#0xFF
+   029F 12                  799 	ld	(de),a
+                            800 ; genPlus
+                            801 ; genPlusIncr
+   02A0 11 70 00            802 	ld	de,#_doorLeft + 0 + 48
+                            803 ; genAssign (pointer)
+   02A3 3E FF               804 	ld	a,#0xFF
+   02A5 12                  805 	ld	(de),a
+                            806 ; genPlus
+                            807 ; genPlusIncr
+   02A6 11 71 00            808 	ld	de,#_doorLeft + 0 + 49
+                            809 ; genAssign (pointer)
+   02A9 3E C0               810 	ld	a,#0xC0
+   02AB 12                  811 	ld	(de),a
+                            812 ; genPlus
+                            813 ; genPlusIncr
+   02AC 11 72 00            814 	ld	de,#_doorLeft + 0 + 50
+                            815 ; genAssign (pointer)
+   02AF 3E 7E               816 	ld	a,#0x7E
+   02B1 12                  817 	ld	(de),a
+                            818 ; genPlus
+                            819 ; genPlusIncr
+   02B2 11 73 00            820 	ld	de,#_doorLeft + 0 + 51
+                            821 ; genAssign (pointer)
+   02B5 3E C1               822 	ld	a,#0xC1
+   02B7 12                  823 	ld	(de),a
+                            824 ; genPlus
+                            825 ; genPlusIncr
+   02B8 11 74 00            826 	ld	de,#_doorLeft + 0 + 52
+                            827 ; genAssign (pointer)
+   02BB 3E C0               828 	ld	a,#0xC0
+   02BD 12                  829 	ld	(de),a
+                            830 ; genPlus
+                            831 ; genPlusIncr
+   02BE 11 75 00            832 	ld	de,#_doorLeft + 0 + 53
+                            833 ; genAssign (pointer)
+   02C1 3E FF               834 	ld	a,#0xFF
+   02C3 12                  835 	ld	(de),a
+                            836 ; genPlus
+                            837 ; genPlusIncr
+   02C4 11 76 00            838 	ld	de,#_doorLeft + 0 + 54
+                            839 ; genAssign (pointer)
+   02C7 3E FF               840 	ld	a,#0xFF
+   02C9 12                  841 	ld	(de),a
+                            842 ; genPlus
+                            843 ; genPlusIncr
+   02CA 11 77 00            844 	ld	de,#_doorLeft + 0 + 55
+                            845 ; genAssign (pointer)
+   02CD 3E C0               846 	ld	a,#0xC0
+   02CF 12                  847 	ld	(de),a
+                            848 ; genPlus
+                            849 ; genPlusIncr
+   02D0 11 78 00            850 	ld	de,#_doorLeft + 0 + 56
+                            851 ; genAssign (pointer)
+   02D3 3E FE               852 	ld	a,#0xFE
+   02D5 12                  853 	ld	(de),a
+                            854 ; genPlus
+                            855 ; genPlusIncr
+   02D6 11 79 00            856 	ld	de,#_doorLeft + 0 + 57
+                            857 ; genAssign (pointer)
+   02D9 3E 01               858 	ld	a,#0x01
+   02DB 12                  859 	ld	(de),a
+                            860 ; genPlus
+                            861 ; genPlusIncr
+   02DC 11 7A 00            862 	ld	de,#_doorLeft + 0 + 58
+                            863 ; genAssign (pointer)
+   02DF 3E 00               864 	ld	a,#0x00
+   02E1 12                  865 	ld	(de),a
+                            866 ; genPlus
+                            867 ; genPlusIncr
+   02E2 11 7B 00            868 	ld	de,#_doorLeft + 0 + 59
+                            869 ; genAssign (pointer)
+   02E5 3E FF               870 	ld	a,#0xFF
+   02E7 12                  871 	ld	(de),a
+                            872 ; genPlus
+                            873 ; genPlusIncr
+   02E8 11 7C 00            874 	ld	de,#_doorLeft + 0 + 60
+                            875 ; genAssign (pointer)
+   02EB 3E FF               876 	ld	a,#0xFF
+   02ED 12                  877 	ld	(de),a
+                            878 ; genPlus
+                            879 ; genPlusIncr
+   02EE 11 7D 00            880 	ld	de,#_doorLeft + 0 + 61
+                            881 ; genAssign (pointer)
+   02F1 3E FF               882 	ld	a,#0xFF
+   02F3 12                  883 	ld	(de),a
+                            884 ; genPlus
+                            885 ; genPlusIncr
+   02F4 11 7E 00            886 	ld	de,#_doorLeft + 0 + 62
+                            887 ; genAssign (pointer)
+   02F7 3E 00               888 	ld	a,#0x00
+   02F9 12                  889 	ld	(de),a
+                            890 ; genPlus
+                            891 ; genPlusIncr
+   02FA 11 7F 00            892 	ld	de,#_doorLeft + 0 + 63
+                            893 ; genAssign (pointer)
+   02FD 3E 00               894 	ld	a,#0x00
+   02FF 12                  895 	ld	(de),a
+                            896 ;--------------------------------------------------------
+                            897 ; Home
+                            898 ;--------------------------------------------------------
+                            899 	.area _HOME
+                            900 	.area _CODE
+                            901 ;--------------------------------------------------------
+                            902 ; code
+                            903 ;--------------------------------------------------------
+                            904 	.area _CODE
+                            905 ;	main.c 10
+                            906 ; genLabel
+                            907 ; genFunction
+                            908 ;	---------------------------------
+                            909 ; Function pdelay
+                            910 ; ---------------------------------
+   0000                     911 ___pdelay_start:
+   0000                     912 _pdelay:
+   0000 C5                  913 	push	bc
+                            914 	
+                            915 ;	main.c 12
+                            916 ; genAssign
+   0001 0E 00               917 	ld	c,#0x00
+                            918 ; genLabel
+   0003                     919 00101$:
+                            920 ; genCmpLt
+                            921 ; AOP_STK for 
+   0003 AF                  922 	xor	a,a
+   0004 79                  923 	ld	a,c
+   0005 F8 04               924 	lda	hl,4(sp)
+   0007 9E                  925 	sbc	a,(hl) ; 2
+   0008 D2 12 00            926 	jp	nc,00105$
+                            927 ;	main.c 13
+                            928 ; genCall
+   000B CD 00 00            929 	call	_wait_vbl_done
+                            930 ;	main.c 12
+                            931 ; genPlus
+                            932 ; genPlusIncr
+   000E 0C                  933 	inc	c
+                            934 ; genGoto
+   000F C3 03 00            935 	jp	00101$
+                            936 ; genLabel
+   0012                     937 00105$:
+                            938 ; genEndFunction
+                            939 	
+   0012 C1                  940 	pop	bc
+   0013 C9                  941 	ret
+   0014                     942 ___pdelay_end:
+   0014                     943 _background_data:
+   0014 FF                  944 	.db #0xFF
+   0015 FF                  945 	.db #0xFF
+   0016 CE                  946 	.db #0xCE
+   0017 F9                  947 	.db #0xF9
+   0018 EC                  948 	.db #0xEC
+   0019 BB                  949 	.db #0xBB
+   001A F8                  950 	.db #0xF8
+   001B FF                  951 	.db #0xFF
+   001C CF                  952 	.db #0xCF
+   001D FF                  953 	.db #0xFF
+   001E 8D                  954 	.db #0x8D
+   001F FF                  955 	.db #0xFF
+   0020 9E                  956 	.db #0x9E
+   0021 FB                  957 	.db #0xFB
+   0022 8F                  958 	.db #0x8F
+   0023 FF                  959 	.db #0xFF
+   0024 FF                  960 	.db #0xFF
+   0025 FF                  961 	.db #0xFF
+   0026 1D                  962 	.db #0x1D
+   0027 FB                  963 	.db #0xFB
+   0028 0D                  964 	.db #0x0D
+   0029 FB                  965 	.db #0xFB
+   002A 4C                  966 	.db #0x4C
+   002B FB                  967 	.db #0xFB
+   002C FF                  968 	.db #0xFF
+   002D FF                  969 	.db #0xFF
+   002E E0                  970 	.db #0xE0
+   002F 9F                  971 	.db #0x9F
+   0030 88                  972 	.db #0x88
+   0031 FF                  973 	.db #0xFF
+   0032 87                  974 	.db #0x87
+   0033 FF                  975 	.db #0xFF
+   0034 FF                  976 	.db #0xFF
+   0035 FF                  977 	.db #0xFF
+   0036 0E                  978 	.db #0x0E
+   0037 F9                  979 	.db #0xF9
+   0038 4C                  980 	.db #0x4C
+   0039 FB                  981 	.db #0xFB
+   003A 08                  982 	.db #0x08
+   003B FF                  983 	.db #0xFF
+   003C FF                  984 	.db #0xFF
+   003D FF                  985 	.db #0xFF
+   003E C1                  986 	.db #0xC1
+   003F BF                  987 	.db #0xBF
+   0040 80                  988 	.db #0x80
+   0041 FF                  989 	.db #0xFF
+   0042 C1                  990 	.db #0xC1
+   0043 FF                  991 	.db #0xFF
+   0044 FF                  992 	.db #0xFF
+   0045 FF                  993 	.db #0xFF
+   0046 1E                  994 	.db #0x1E
+   0047 FB                  995 	.db #0xFB
+   0048 0C                  996 	.db #0x0C
+   0049 FF                  997 	.db #0xFF
+   004A 48                  998 	.db #0x48
+   004B FF                  999 	.db #0xFF
+   004C FC                 1000 	.db #0xFC
+   004D FB                 1001 	.db #0xFB
+   004E DC                 1002 	.db #0xDC
+   004F BB                 1003 	.db #0xBB
+   0050 8E                 1004 	.db #0x8E
+   0051 F9                 1005 	.db #0xF9
+   0052 8F                 1006 	.db #0x8F
+   0053 FF                 1007 	.db #0xFF
+   0054 8D                 1008 	.db #0x8D
+   0055 FF                 1009 	.db #0xFF
+   0056 C8                 1010 	.db #0xC8
+   0057 BF                 1011 	.db #0xBF
+   0058 E8                 1012 	.db #0xE8
+   0059 9F                 1013 	.db #0x9F
+   005A F8                 1014 	.db #0xF8
+   005B FF                 1015 	.db #0xFF
+   005C 88                 1016 	.db #0x88
+   005D FF                 1017 	.db #0xFF
+   005E 88                 1018 	.db #0x88
+   005F FF                 1019 	.db #0xFF
+   0060 AD                 1020 	.db #0xAD
+   0061 FB                 1021 	.db #0xFB
+   0062 8F                 1022 	.db #0x8F
+   0063 FF                 1023 	.db #0xFF
+   0064 FF                 1024 	.db #0xFF
+   0065 FF                 1025 	.db #0xFF
+   0066 EE                 1026 	.db #0xEE
+   0067 F9                 1027 	.db #0xF9
+   0068 EC                 1028 	.db #0xEC
+   0069 BB                 1029 	.db #0xBB
+   006A FC                 1030 	.db #0xFC
+   006B FB                 1031 	.db #0xFB
+   006C 8F                 1032 	.db #0x8F
+   006D FF                 1033 	.db #0xFF
+   006E 8F                 1034 	.db #0x8F
+   006F FF                 1035 	.db #0xFF
+   0070 9E                 1036 	.db #0x9E
+   0071 EB                 1037 	.db #0xEB
+   0072 8F                 1038 	.db #0x8F
+   0073 FF                 1039 	.db #0xFF
+   0074 FF                 1040 	.db #0xFF
+   0075 FF                 1041 	.db #0xFF
+   0076 0E                 1042 	.db #0x0E
+   0077 F9                 1043 	.db #0xF9
+   0078 0C                 1044 	.db #0x0C
+   0079 FB                 1045 	.db #0xFB
+   007A 4C                 1046 	.db #0x4C
+   007B BF                 1047 	.db #0xBF
+   007C FF                 1048 	.db #0xFF
+   007D FF                 1049 	.db #0xFF
+   007E E1                 1050 	.db #0xE1
+   007F 9F                 1051 	.db #0x9F
+   0080 A0                 1052 	.db #0xA0
+   0081 FF                 1053 	.db #0xFF
+   0082 88                 1054 	.db #0x88
+   0083 FF                 1055 	.db #0xFF
+   0084 FF                 1056 	.db #0xFF
+   0085 FF                 1057 	.db #0xFF
+   0086 2E                 1058 	.db #0x2E
+   0087 F9                 1059 	.db #0xF9
+   0088 0C                 1060 	.db #0x0C
+   0089 FB                 1061 	.db #0xFB
+   008A 2C                 1062 	.db #0x2C
+   008B FB                 1063 	.db #0xFB
+   008C FF                 1064 	.db #0xFF
+   008D FF                 1065 	.db #0xFF
+   008E F3                 1066 	.db #0xF3
+   008F 8F                 1067 	.db #0x8F
+   0090 CE                 1068 	.db #0xCE
+   0091 BF                 1069 	.db #0xBF
+   0092 80                 1070 	.db #0x80
+   0093 FF                 1071 	.db #0xFF
+   0094 FF                 1072 	.db #0xFF
+   0095 FF                 1073 	.db #0xFF
+   0096 08                 1074 	.db #0x08
+   0097 FF                 1075 	.db #0xFF
+   0098 08                 1076 	.db #0x08
+   0099 FF                 1077 	.db #0xFF
+   009A 48                 1078 	.db #0x48
+   009B BF                 1079 	.db #0xBF
+   009C F8                 1080 	.db #0xF8
+   009D FF                 1081 	.db #0xFF
+   009E C8                 1082 	.db #0xC8
+   009F BF                 1083 	.db #0xBF
+   00A0 CD                 1084 	.db #0xCD
+   00A1 FB                 1085 	.db #0xFB
+   00A2 8F                 1086 	.db #0x8F
+   00A3 FF                 1087 	.db #0xFF
+   00A4 8C                 1088 	.db #0x8C
+   00A5 FF                 1089 	.db #0xFF
+   00A6 C8                 1090 	.db #0xC8
+   00A7 BF                 1091 	.db #0xBF
+   00A8 F8                 1092 	.db #0xF8
+   00A9 9F                 1093 	.db #0x9F
+   00AA F9                 1094 	.db #0xF9
+   00AB FF                 1095 	.db #0xFF
+   00AC 88                 1096 	.db #0x88
+   00AD FF                 1097 	.db #0xFF
+   00AE 8E                 1098 	.db #0x8E
+   00AF FB                 1099 	.db #0xFB
+   00B0 9C                 1100 	.db #0x9C
+   00B1 EB                 1101 	.db #0xEB
+   00B2 8F                 1102 	.db #0x8F
+   00B3 FF                 1103 	.db #0xFF
+   00B4 E9                 1104 	.db #0xE9
+   00B5 FF                 1105 	.db #0xFF
+   00B6 89                 1106 	.db #0x89
+   00B7 FF                 1107 	.db #0xFF
+   00B8 F9                 1108 	.db #0xF9
+   00B9 8F                 1109 	.db #0x8F
+   00BA FA                 1110 	.db #0xFA
+   00BB FF                 1111 	.db #0xFF
+   00BC C8                 1112 	.db #0xC8
+   00BD FF                 1113 	.db #0xFF
+   00BE 8C                 1114 	.db #0x8C
+   00BF FB                 1115 	.db #0xFB
+   00C0 9C                 1116 	.db #0x9C
+   00C1 FB                 1117 	.db #0xFB
+   00C2 8F                 1118 	.db #0x8F
+   00C3 FF                 1119 	.db #0xFF
+   00C4 8C                 1120 	.db #0x8C
+   00C5 FF                 1121 	.db #0xFF
+   00C6 CE                 1122 	.db #0xCE
+   00C7 BF                 1123 	.db #0xBF
+   00C8 FA                 1124 	.db #0xFA
+   00C9 8F                 1125 	.db #0x8F
+   00CA FA                 1126 	.db #0xFA
+   00CB FF                 1127 	.db #0xFF
+   00CC 8C                 1128 	.db #0x8C
+   00CD FB                 1129 	.db #0xFB
+   00CE DC                 1130 	.db #0xDC
+   00CF FB                 1131 	.db #0xFB
+   00D0 8E                 1132 	.db #0x8E
+   00D1 F9                 1133 	.db #0xF9
+   00D2 8F                 1134 	.db #0x8F
+   00D3 FF                 1135 	.db #0xFF
+   00D4 FF                 1136 	.db #0xFF
+   00D5 FF                 1137 	.db #0xFF
+   00D6 CF                 1138 	.db #0xCF
+   00D7 F3                 1139 	.db #0xF3
+   00D8 FF                 1140 	.db #0xFF
+   00D9 81                 1141 	.db #0x81
+   00DA BF                 1142 	.db #0xBF
+   00DB C1                 1143 	.db #0xC1
+   00DC BF                 1144 	.db #0xBF
+   00DD C1                 1145 	.db #0xC1
+   00DE FB                 1146 	.db #0xFB
+   00DF 85                 1147 	.db #0x85
+   00E0 FF                 1148 	.db #0xFF
+   00E1 81                 1149 	.db #0x81
+   00E2 FF                 1150 	.db #0xFF
+   00E3 81                 1151 	.db #0x81
+   00E4 DD                 1152 	.db #0xDD
+   00E5 A3                 1153 	.db #0xA3
+   00E6 FD                 1154 	.db #0xFD
+   00E7 83                 1155 	.db #0x83
+   00E8 FD                 1156 	.db #0xFD
+   00E9 83                 1157 	.db #0x83
+   00EA FD                 1158 	.db #0xFD
+   00EB 83                 1159 	.db #0x83
+   00EC F9                 1160 	.db #0xF9
+   00ED 87                 1161 	.db #0x87
+   00EE FB                 1162 	.db #0xFB
+   00EF 87                 1163 	.db #0x87
+   00F0 F5                 1164 	.db #0xF5
+   00F1 8F                 1165 	.db #0x8F
+   00F2 C3                 1166 	.db #0xC3
+   00F3 FF                 1167 	.db #0xFF
+   00F4 FF                 1168 	.db #0xFF
+   00F5 FF                 1169 	.db #0xFF
+   00F6 FF                 1170 	.db #0xFF
+   00F7 C0                 1171 	.db #0xC0
+   00F8 F7                 1172 	.db #0xF7
+   00F9 88                 1173 	.db #0x88
+   00FA FF                 1174 	.db #0xFF
+   00FB 80                 1175 	.db #0x80
+   00FC FE                 1176 	.db #0xFE
+   00FD 81                 1177 	.db #0x81
+   00FE AF                 1178 	.db #0xAF
+   00FF D0                 1179 	.db #0xD0
+   0100 E0                 1180 	.db #0xE0
+   0101 DF                 1181 	.db #0xDF
+   0102 FF                 1182 	.db #0xFF
+   0103 FF                 1183 	.db #0xFF
+   0104 FF                 1184 	.db #0xFF
+   0105 FF                 1185 	.db #0xFF
+   0106 C3                 1186 	.db #0xC3
+   0107 3F                 1187 	.db #0x3F
+   0108 F9                 1188 	.db #0xF9
+   0109 07                 1189 	.db #0x07
+   010A FF                 1190 	.db #0xFF
+   010B 01                 1191 	.db #0x01
+   010C FD                 1192 	.db #0xFD
+   010D 03                 1193 	.db #0x03
+   010E F9                 1194 	.db #0xF9
+   010F 07                 1195 	.db #0x07
+   0110 83                 1196 	.db #0x83
+   0111 7F                 1197 	.db #0x7F
+   0112 FF                 1198 	.db #0xFF
+   0113 FF                 1199 	.db #0xFF
+   0114 FF                 1200 	.db #0xFF
+   0115 FF                 1201 	.db #0xFF
+   0116 E9                 1202 	.db #0xE9
+   0117 FF                 1203 	.db #0xFF
+   0118 89                 1204 	.db #0x89
+   0119 FF                 1205 	.db #0xFF
+   011A F9                 1206 	.db #0xF9
+   011B 8F                 1207 	.db #0x8F
+   011C FA                 1208 	.db #0xFA
+   011D FF                 1209 	.db #0xFF
+   011E C8                 1210 	.db #0xC8
+   011F FF                 1211 	.db #0xFF
+   0120 8C                 1212 	.db #0x8C
+   0121 FB                 1213 	.db #0xFB
+   0122 9C                 1214 	.db #0x9C
+   0123 FB                 1215 	.db #0xFB
+   0124 FF                 1216 	.db #0xFF
+   0125 FF                 1217 	.db #0xFF
+   0126 8D                 1218 	.db #0x8D
+   0127 FF                 1219 	.db #0xFF
+   0128 C9                 1220 	.db #0xC9
+   0129 BF                 1221 	.db #0xBF
+   012A F8                 1222 	.db #0xF8
+   012B 8F                 1223 	.db #0x8F
+   012C FF                 1224 	.db #0xFF
+   012D FF                 1225 	.db #0xFF
+   012E 90                 1226 	.db #0x90
+   012F FF                 1227 	.db #0xFF
+   0130 88                 1228 	.db #0x88
+   0131 FF                 1229 	.db #0xFF
+   0132 87                 1230 	.db #0x87
+   0133 FF                 1231 	.db #0xFF
+   0134 FF                 1232 	.db #0xFF
+   0135 FF                 1233 	.db #0xFF
+   0136 E9                 1234 	.db #0xE9
+   0137 FF                 1235 	.db #0xFF
+   0138 49                 1236 	.db #0x49
+   0139 FF                 1237 	.db #0xFF
+   013A 39                 1238 	.db #0x39
+   013B EF                 1239 	.db #0xEF
+   013C FA                 1240 	.db #0xFA
+   013D FF                 1241 	.db #0xFF
+   013E C8                 1242 	.db #0xC8
+   013F BF                 1243 	.db #0xBF
+   0140 88                 1244 	.db #0x88
+   0141 FF                 1245 	.db #0xFF
+   0142 C8                 1246 	.db #0xC8
+   0143 FF                 1247 	.db #0xFF
+   0144 FF                 1248 	.db #0xFF
+   0145 FF                 1249 	.db #0xFF
+   0146 8C                 1250 	.db #0x8C
+   0147 FF                 1251 	.db #0xFF
+   0148 CE                 1252 	.db #0xCE
+   0149 BF                 1253 	.db #0xBF
+   014A FA                 1254 	.db #0xFA
+   014B 8F                 1255 	.db #0x8F
+   014C FA                 1256 	.db #0xFA
+   014D FF                 1257 	.db #0xFF
+   014E 8C                 1258 	.db #0x8C
+   014F FB                 1259 	.db #0xFB
+   0150 DC                 1260 	.db #0xDC
+   0151 FB                 1261 	.db #0xFB
+   0152 8E                 1262 	.db #0x8E
+   0153 F9                 1263 	.db #0xF9
+   0154 8F                 1264 	.db #0x8F
+   0155 FF                 1265 	.db #0xFF
+   0156 8D                 1266 	.db #0x8D
+   0157 FF                 1267 	.db #0xFF
+   0158 C8                 1268 	.db #0xC8
+   0159 BF                 1269 	.db #0xBF
+   015A E8                 1270 	.db #0xE8
+   015B 9F                 1271 	.db #0x9F
+   015C FF                 1272 	.db #0xFF
+   015D FF                 1273 	.db #0xFF
+   015E 81                 1274 	.db #0x81
+   015F FF                 1275 	.db #0xFF
+   0160 80                 1276 	.db #0x80
+   0161 FF                 1277 	.db #0xFF
+   0162 88                 1278 	.db #0x88
+   0163 FF                 1279 	.db #0xFF
+   0164 FF                 1280 	.db #0xFF
+   0165 FF                 1281 	.db #0xFF
+   0166 8C                 1282 	.db #0x8C
+   0167 FF                 1283 	.db #0xFF
+   0168 08                 1284 	.db #0x08
+   0169 FF                 1285 	.db #0xFF
+   016A 58                 1286 	.db #0x58
+   016B BF                 1287 	.db #0xBF
+   016C F9                 1288 	.db #0xF9
+   016D FF                 1289 	.db #0xFF
+   016E F8                 1290 	.db #0xF8
+   016F 8F                 1291 	.db #0x8F
+   0170 C8                 1292 	.db #0xC8
+   0171 BF                 1293 	.db #0xBF
+   0172 88                 1294 	.db #0x88
+   0173 FF                 1295 	.db #0xFF
+   0174                    1296 _background_map:
+   0174 00                 1297 	.db #0x00
+   0175 01                 1298 	.db #0x01
+   0176 02                 1299 	.db #0x02
+   0177 01                 1300 	.db #0x01
+   0178 02                 1301 	.db #0x02
+   0179 01                 1302 	.db #0x01
+   017A 02                 1303 	.db #0x02
+   017B 01                 1304 	.db #0x01
+   017C 02                 1305 	.db #0x02
+   017D 01                 1306 	.db #0x01
+   017E 02                 1307 	.db #0x02
+   017F 01                 1308 	.db #0x01
+   0180 02                 1309 	.db #0x02
+   0181 01                 1310 	.db #0x01
+   0182 02                 1311 	.db #0x02
+   0183 01                 1312 	.db #0x01
+   0184 02                 1313 	.db #0x02
+   0185 01                 1314 	.db #0x01
+   0186 02                 1315 	.db #0x02
+   0187 03                 1316 	.db #0x03
+   0188 04                 1317 	.db #0x04
+   0189 05                 1318 	.db #0x05
+   018A 06                 1319 	.db #0x06
+   018B 07                 1320 	.db #0x07
+   018C 06                 1321 	.db #0x06
+   018D 07                 1322 	.db #0x07
+   018E 06                 1323 	.db #0x06
+   018F 07                 1324 	.db #0x07
+   0190 06                 1325 	.db #0x06
+   0191 07                 1326 	.db #0x07
+   0192 06                 1327 	.db #0x06
+   0193 07                 1328 	.db #0x07
+   0194 06                 1329 	.db #0x06
+   0195 07                 1330 	.db #0x07
+   0196 06                 1331 	.db #0x06
+   0197 07                 1332 	.db #0x07
+   0198 06                 1333 	.db #0x06
+   0199 07                 1334 	.db #0x07
+   019A 08                 1335 	.db #0x08
+   019B 09                 1336 	.db #0x09
+   019C 0A                 1337 	.db #0x0A
+   019D 0B                 1338 	.db #0x0B
+   019E 0C                 1339 	.db #0x0C
+   019F 0D                 1340 	.db #0x0D
+   01A0 0E                 1341 	.db #0x0E
+   01A1 0F                 1342 	.db #0x0F
+   01A2 0C                 1343 	.db #0x0C
+   01A3 0D                 1344 	.db #0x0D
+   01A4 0E                 1345 	.db #0x0E
+   01A5 0F                 1346 	.db #0x0F
+   01A6 0C                 1347 	.db #0x0C
+   01A7 0D                 1348 	.db #0x0D
+   01A8 0E                 1349 	.db #0x0E
+   01A9 0F                 1350 	.db #0x0F
+   01AA 0C                 1351 	.db #0x0C
+   01AB 0D                 1352 	.db #0x0D
+   01AC 0E                 1353 	.db #0x0E
+   01AD 0F                 1354 	.db #0x0F
+   01AE 0A                 1355 	.db #0x0A
+   01AF 0B                 1356 	.db #0x0B
+   01B0 04                 1357 	.db #0x04
+   01B1 09                 1358 	.db #0x09
+   01B2 0D                 1359 	.db #0x0D
+   01B3 0E                 1360 	.db #0x0E
+   01B4 0F                 1361 	.db #0x0F
+   01B5 0C                 1362 	.db #0x0C
+   01B6 0D                 1363 	.db #0x0D
+   01B7 0E                 1364 	.db #0x0E
+   01B8 0F                 1365 	.db #0x0F
+   01B9 0C                 1366 	.db #0x0C
+   01BA 0D                 1367 	.db #0x0D
+   01BB 0E                 1368 	.db #0x0E
+   01BC 0F                 1369 	.db #0x0F
+   01BD 0C                 1370 	.db #0x0C
+   01BE 0D                 1371 	.db #0x0D
+   01BF 0E                 1372 	.db #0x0E
+   01C0 0F                 1373 	.db #0x0F
+   01C1 0C                 1374 	.db #0x0C
+   01C2 04                 1375 	.db #0x04
+   01C3 09                 1376 	.db #0x09
+   01C4 0A                 1377 	.db #0x0A
+   01C5 0B                 1378 	.db #0x0B
+   01C6 0E                 1379 	.db #0x0E
+   01C7 0F                 1380 	.db #0x0F
+   01C8 0C                 1381 	.db #0x0C
+   01C9 0D                 1382 	.db #0x0D
+   01CA 0E                 1383 	.db #0x0E
+   01CB 0F                 1384 	.db #0x0F
+   01CC 0C                 1385 	.db #0x0C
+   01CD 0D                 1386 	.db #0x0D
+   01CE 0E                 1387 	.db #0x0E
+   01CF 0F                 1388 	.db #0x0F
+   01D0 0C                 1389 	.db #0x0C
+   01D1 0D                 1390 	.db #0x0D
+   01D2 0E                 1391 	.db #0x0E
+   01D3 0F                 1392 	.db #0x0F
+   01D4 0C                 1393 	.db #0x0C
+   01D5 0D                 1394 	.db #0x0D
+   01D6 0A                 1395 	.db #0x0A
+   01D7 0B                 1396 	.db #0x0B
+   01D8 04                 1397 	.db #0x04
+   01D9 09                 1398 	.db #0x09
+   01DA 0F                 1399 	.db #0x0F
+   01DB 0C                 1400 	.db #0x0C
+   01DC 0D                 1401 	.db #0x0D
+   01DD 0E                 1402 	.db #0x0E
+   01DE 0F                 1403 	.db #0x0F
+   01DF 0C                 1404 	.db #0x0C
+   01E0 0D                 1405 	.db #0x0D
+   01E1 0E                 1406 	.db #0x0E
+   01E2 0F                 1407 	.db #0x0F
+   01E3 0C                 1408 	.db #0x0C
+   01E4 0D                 1409 	.db #0x0D
+   01E5 0E                 1410 	.db #0x0E
+   01E6 0F                 1411 	.db #0x0F
+   01E7 0C                 1412 	.db #0x0C
+   01E8 0D                 1413 	.db #0x0D
+   01E9 0E                 1414 	.db #0x0E
+   01EA 04                 1415 	.db #0x04
+   01EB 09                 1416 	.db #0x09
+   01EC 0A                 1417 	.db #0x0A
+   01ED 0B                 1418 	.db #0x0B
+   01EE 0C                 1419 	.db #0x0C
+   01EF 0D                 1420 	.db #0x0D
+   01F0 0E                 1421 	.db #0x0E
+   01F1 0F                 1422 	.db #0x0F
+   01F2 0C                 1423 	.db #0x0C
+   01F3 0D                 1424 	.db #0x0D
+   01F4 0E                 1425 	.db #0x0E
+   01F5 0F                 1426 	.db #0x0F
+   01F6 0C                 1427 	.db #0x0C
+   01F7 0D                 1428 	.db #0x0D
+   01F8 0E                 1429 	.db #0x0E
+   01F9 0F                 1430 	.db #0x0F
+   01FA 0C                 1431 	.db #0x0C
+   01FB 0D                 1432 	.db #0x0D
+   01FC 0E                 1433 	.db #0x0E
+   01FD 0F                 1434 	.db #0x0F
+   01FE 0A                 1435 	.db #0x0A
+   01FF 0B                 1436 	.db #0x0B
+   0200 04                 1437 	.db #0x04
+   0201 09                 1438 	.db #0x09
+   0202 0D                 1439 	.db #0x0D
+   0203 0E                 1440 	.db #0x0E
+   0204 0F                 1441 	.db #0x0F
+   0205 0C                 1442 	.db #0x0C
+   0206 0D                 1443 	.db #0x0D
+   0207 0E                 1444 	.db #0x0E
+   0208 0F                 1445 	.db #0x0F
+   0209 0C                 1446 	.db #0x0C
+   020A 0D                 1447 	.db #0x0D
+   020B 0E                 1448 	.db #0x0E
+   020C 0F                 1449 	.db #0x0F
+   020D 0C                 1450 	.db #0x0C
+   020E 0D                 1451 	.db #0x0D
+   020F 0E                 1452 	.db #0x0E
+   0210 0F                 1453 	.db #0x0F
+   0211 0C                 1454 	.db #0x0C
+   0212 04                 1455 	.db #0x04
+   0213 09                 1456 	.db #0x09
+   0214 0A                 1457 	.db #0x0A
+   0215 0B                 1458 	.db #0x0B
+   0216 0E                 1459 	.db #0x0E
+   0217 0F                 1460 	.db #0x0F
+   0218 0C                 1461 	.db #0x0C
+   0219 0D                 1462 	.db #0x0D
+   021A 0E                 1463 	.db #0x0E
+   021B 0F                 1464 	.db #0x0F
+   021C 0C                 1465 	.db #0x0C
+   021D 0D                 1466 	.db #0x0D
+   021E 0E                 1467 	.db #0x0E
+   021F 0F                 1468 	.db #0x0F
+   0220 0C                 1469 	.db #0x0C
+   0221 0D                 1470 	.db #0x0D
+   0222 0E                 1471 	.db #0x0E
+   0223 0F                 1472 	.db #0x0F
+   0224 0C                 1473 	.db #0x0C
+   0225 0D                 1474 	.db #0x0D
+   0226 0A                 1475 	.db #0x0A
+   0227 0B                 1476 	.db #0x0B
+   0228 04                 1477 	.db #0x04
+   0229 09                 1478 	.db #0x09
+   022A 0F                 1479 	.db #0x0F
+   022B 0C                 1480 	.db #0x0C
+   022C 0D                 1481 	.db #0x0D
+   022D 0E                 1482 	.db #0x0E
+   022E 0F                 1483 	.db #0x0F
+   022F 0C                 1484 	.db #0x0C
+   0230 0D                 1485 	.db #0x0D
+   0231 0E                 1486 	.db #0x0E
+   0232 0F                 1487 	.db #0x0F
+   0233 0C                 1488 	.db #0x0C
+   0234 0D                 1489 	.db #0x0D
+   0235 0E                 1490 	.db #0x0E
+   0236 0F                 1491 	.db #0x0F
+   0237 0C                 1492 	.db #0x0C
+   0238 0D                 1493 	.db #0x0D
+   0239 0E                 1494 	.db #0x0E
+   023A 04                 1495 	.db #0x04
+   023B 09                 1496 	.db #0x09
+   023C 0A                 1497 	.db #0x0A
+   023D 0B                 1498 	.db #0x0B
+   023E 0C                 1499 	.db #0x0C
+   023F 0D                 1500 	.db #0x0D
+   0240 0E                 1501 	.db #0x0E
+   0241 0F                 1502 	.db #0x0F
+   0242 0C                 1503 	.db #0x0C
+   0243 0D                 1504 	.db #0x0D
+   0244 0E                 1505 	.db #0x0E
+   0245 0F                 1506 	.db #0x0F
+   0246 0C                 1507 	.db #0x0C
+   0247 0D                 1508 	.db #0x0D
+   0248 0E                 1509 	.db #0x0E
+   0249 0F                 1510 	.db #0x0F
+   024A 0C                 1511 	.db #0x0C
+   024B 0D                 1512 	.db #0x0D
+   024C 0E                 1513 	.db #0x0E
+   024D 0F                 1514 	.db #0x0F
+   024E 0A                 1515 	.db #0x0A
+   024F 0B                 1516 	.db #0x0B
+   0250 04                 1517 	.db #0x04
+   0251 09                 1518 	.db #0x09
+   0252 0D                 1519 	.db #0x0D
+   0253 0E                 1520 	.db #0x0E
+   0254 0F                 1521 	.db #0x0F
+   0255 0C                 1522 	.db #0x0C
+   0256 0D                 1523 	.db #0x0D
+   0257 0E                 1524 	.db #0x0E
+   0258 0F                 1525 	.db #0x0F
+   0259 0C                 1526 	.db #0x0C
+   025A 0D                 1527 	.db #0x0D
+   025B 0E                 1528 	.db #0x0E
+   025C 0F                 1529 	.db #0x0F
+   025D 0C                 1530 	.db #0x0C
+   025E 0D                 1531 	.db #0x0D
+   025F 0E                 1532 	.db #0x0E
+   0260 0F                 1533 	.db #0x0F
+   0261 0C                 1534 	.db #0x0C
+   0262 04                 1535 	.db #0x04
+   0263 09                 1536 	.db #0x09
+   0264 0A                 1537 	.db #0x0A
+   0265 0B                 1538 	.db #0x0B
+   0266 0E                 1539 	.db #0x0E
+   0267 0F                 1540 	.db #0x0F
+   0268 0C                 1541 	.db #0x0C
+   0269 0D                 1542 	.db #0x0D
+   026A 0E                 1543 	.db #0x0E
+   026B 0F                 1544 	.db #0x0F
+   026C 0C                 1545 	.db #0x0C
+   026D 0D                 1546 	.db #0x0D
+   026E 0E                 1547 	.db #0x0E
+   026F 0F                 1548 	.db #0x0F
+   0270 0C                 1549 	.db #0x0C
+   0271 0D                 1550 	.db #0x0D
+   0272 0E                 1551 	.db #0x0E
+   0273 0F                 1552 	.db #0x0F
+   0274 0C                 1553 	.db #0x0C
+   0275 0D                 1554 	.db #0x0D
+   0276 0A                 1555 	.db #0x0A
+   0277 0B                 1556 	.db #0x0B
+   0278 04                 1557 	.db #0x04
+   0279 09                 1558 	.db #0x09
+   027A 0F                 1559 	.db #0x0F
+   027B 0C                 1560 	.db #0x0C
+   027C 0D                 1561 	.db #0x0D
+   027D 0E                 1562 	.db #0x0E
+   027E 0F                 1563 	.db #0x0F
+   027F 0C                 1564 	.db #0x0C
+   0280 0D                 1565 	.db #0x0D
+   0281 0E                 1566 	.db #0x0E
+   0282 0F                 1567 	.db #0x0F
+   0283 0C                 1568 	.db #0x0C
+   0284 0D                 1569 	.db #0x0D
+   0285 0E                 1570 	.db #0x0E
+   0286 0F                 1571 	.db #0x0F
+   0287 0C                 1572 	.db #0x0C
+   0288 0D                 1573 	.db #0x0D
+   0289 0E                 1574 	.db #0x0E
+   028A 04                 1575 	.db #0x04
+   028B 09                 1576 	.db #0x09
+   028C 0A                 1577 	.db #0x0A
+   028D 0B                 1578 	.db #0x0B
+   028E 0C                 1579 	.db #0x0C
+   028F 0D                 1580 	.db #0x0D
+   0290 0E                 1581 	.db #0x0E
+   0291 0F                 1582 	.db #0x0F
+   0292 0C                 1583 	.db #0x0C
+   0293 0D                 1584 	.db #0x0D
+   0294 0E                 1585 	.db #0x0E
+   0295 0F                 1586 	.db #0x0F
+   0296 0C                 1587 	.db #0x0C
+   0297 0D                 1588 	.db #0x0D
+   0298 0E                 1589 	.db #0x0E
+   0299 0F                 1590 	.db #0x0F
+   029A 0C                 1591 	.db #0x0C
+   029B 0D                 1592 	.db #0x0D
+   029C 0E                 1593 	.db #0x0E
+   029D 0F                 1594 	.db #0x0F
+   029E 0A                 1595 	.db #0x0A
+   029F 0B                 1596 	.db #0x0B
+   02A0 04                 1597 	.db #0x04
+   02A1 09                 1598 	.db #0x09
+   02A2 0D                 1599 	.db #0x0D
+   02A3 0E                 1600 	.db #0x0E
+   02A4 0F                 1601 	.db #0x0F
+   02A5 0C                 1602 	.db #0x0C
+   02A6 0D                 1603 	.db #0x0D
+   02A7 0E                 1604 	.db #0x0E
+   02A8 0F                 1605 	.db #0x0F
+   02A9 0C                 1606 	.db #0x0C
+   02AA 0D                 1607 	.db #0x0D
+   02AB 0E                 1608 	.db #0x0E
+   02AC 0F                 1609 	.db #0x0F
+   02AD 0C                 1610 	.db #0x0C
+   02AE 0D                 1611 	.db #0x0D
+   02AF 0E                 1612 	.db #0x0E
+   02B0 0F                 1613 	.db #0x0F
+   02B1 0C                 1614 	.db #0x0C
+   02B2 04                 1615 	.db #0x04
+   02B3 09                 1616 	.db #0x09
+   02B4 10                 1617 	.db #0x10
+   02B5 11                 1618 	.db #0x11
+   02B6 02                 1619 	.db #0x02
+   02B7 01                 1620 	.db #0x01
+   02B8 02                 1621 	.db #0x02
+   02B9 01                 1622 	.db #0x01
+   02BA 02                 1623 	.db #0x02
+   02BB 01                 1624 	.db #0x01
+   02BC 02                 1625 	.db #0x02
+   02BD 01                 1626 	.db #0x01
+   02BE 02                 1627 	.db #0x02
+   02BF 01                 1628 	.db #0x01
+   02C0 02                 1629 	.db #0x02
+   02C1 01                 1630 	.db #0x01
+   02C2 02                 1631 	.db #0x02
+   02C3 01                 1632 	.db #0x01
+   02C4 02                 1633 	.db #0x02
+   02C5 01                 1634 	.db #0x01
+   02C6 12                 1635 	.db #0x12
+   02C7 13                 1636 	.db #0x13
+   02C8 14                 1637 	.db #0x14
+   02C9 07                 1638 	.db #0x07
+   02CA 06                 1639 	.db #0x06
+   02CB 07                 1640 	.db #0x07
+   02CC 06                 1641 	.db #0x06
+   02CD 07                 1642 	.db #0x07
+   02CE 06                 1643 	.db #0x06
+   02CF 07                 1644 	.db #0x07
+   02D0 06                 1645 	.db #0x06
+   02D1 07                 1646 	.db #0x07
+   02D2 06                 1647 	.db #0x06
+   02D3 07                 1648 	.db #0x07
+   02D4 06                 1649 	.db #0x06
+   02D5 07                 1650 	.db #0x07
+   02D6 06                 1651 	.db #0x06
+   02D7 07                 1652 	.db #0x07
+   02D8 06                 1653 	.db #0x06
+   02D9 07                 1654 	.db #0x07
+   02DA 06                 1655 	.db #0x06
+   02DB 15                 1656 	.db #0x15
+                           1657 ;	main.c 16
+                           1658 ; genLabel
+                           1659 ; genFunction
+                           1660 ;	---------------------------------
+                           1661 ; Function main
+                           1662 ; ---------------------------------
+   02DC                    1663 ___main_start:
+   02DC                    1664 _main:
+                           1665 	
+                           1666 ;	main.c 26
+                           1667 ; genIpush
+   02DC 21 14 00           1668 	ld	hl,#_background_data + 0
+   02DF E5                 1669 	push	hl
+                           1670 ; genIpush
+   02E0 3E 16              1671 	ld	a,#0x16
+   02E2 F5                 1672 	push	af
+   02E3 33                 1673 	inc	sp
+                           1674 ; genIpush
+   02E4 3E 00              1675 	ld	a,#0x00
+   02E6 F5                 1676 	push	af
+   02E7 33                 1677 	inc	sp
+                           1678 ; genCall
+   02E8 CD 00 00           1679 	call	_set_bkg_data
+   02EB E8 04              1680 	lda	sp,4(sp)
+                           1681 ;	main.c 27
+                           1682 ; genIpush
+   02ED 21 74 01           1683 	ld	hl,#_background_map + 0
+   02F0 E5                 1684 	push	hl
+                           1685 ; genIpush
+   02F1 3E 12              1686 	ld	a,#0x12
+   02F3 F5                 1687 	push	af
+   02F4 33                 1688 	inc	sp
+                           1689 ; genIpush
+   02F5 3E 14              1690 	ld	a,#0x14
+   02F7 F5                 1691 	push	af
+   02F8 33                 1692 	inc	sp
+                           1693 ; genIpush
+   02F9 3E 00              1694 	ld	a,#0x00
+   02FB F5                 1695 	push	af
+   02FC 33                 1696 	inc	sp
+                           1697 ; genIpush
+   02FD 3E 00              1698 	ld	a,#0x00
+   02FF F5                 1699 	push	af
+   0300 33                 1700 	inc	sp
+                           1701 ; genCall
+   0301 CD 00 00           1702 	call	_set_bkg_tiles
+   0304 E8 06              1703 	lda	sp,6(sp)
+                           1704 ;	main.c 29
+                           1705 ; genIpush
+   0306 21 00 00           1706 	ld	hl,#_door + 0
+   0309 E5                 1707 	push	hl
+                           1708 ; genIpush
+   030A 3E 04              1709 	ld	a,#0x04
+   030C F5                 1710 	push	af
+   030D 33                 1711 	inc	sp
+                           1712 ; genIpush
+   030E 3E 00              1713 	ld	a,#0x00
+   0310 F5                 1714 	push	af
+   0311 33                 1715 	inc	sp
+                           1716 ; genCall
+   0312 CD 00 00           1717 	call	_set_sprite_data
+   0315 E8 04              1718 	lda	sp,4(sp)
+                           1719 ;	main.c 30
+                           1720 ; genIpush
+   0317 21 40 00           1721 	ld	hl,#_doorLeft + 0
+   031A E5                 1722 	push	hl
+                           1723 ; genIpush
+   031B 3E 04              1724 	ld	a,#0x04
+   031D F5                 1725 	push	af
+   031E 33                 1726 	inc	sp
+                           1727 ; genIpush
+   031F 3E 04              1728 	ld	a,#0x04
+   0321 F5                 1729 	push	af
+   0322 33                 1730 	inc	sp
+                           1731 ; genCall
+   0323 CD 00 00           1732 	call	_set_sprite_data
+   0326 E8 04              1733 	lda	sp,4(sp)
+                           1734 ;	main.c 32
+                           1735 ; genIpush
+   0328 3E 00              1736 	ld	a,#0x00
+   032A F5                 1737 	push	af
+   032B 33                 1738 	inc	sp
+                           1739 ; genIpush
+   032C 3E 00              1740 	ld	a,#0x00
+   032E F5                 1741 	push	af
+   032F 33                 1742 	inc	sp
+                           1743 ; genCall
+   0330 CD 00 00           1744 	call	_set_sprite_tile
+   0333 E8 02              1745 	lda	sp,2(sp)
+                           1746 ;	main.c 33
+                           1747 ; genIpush
+   0335 3E 01              1748 	ld	a,#0x01
+   0337 F5                 1749 	push	af
+   0338 33                 1750 	inc	sp
+                           1751 ; genIpush
+   0339 3E 01              1752 	ld	a,#0x01
+   033B F5                 1753 	push	af
+   033C 33                 1754 	inc	sp
+                           1755 ; genCall
+   033D CD 00 00           1756 	call	_set_sprite_tile
+   0340 E8 02              1757 	lda	sp,2(sp)
+                           1758 ;	main.c 34
+                           1759 ; genIpush
+   0342 3E 02              1760 	ld	a,#0x02
+   0344 F5                 1761 	push	af
+   0345 33                 1762 	inc	sp
+                           1763 ; genIpush
+   0346 3E 02              1764 	ld	a,#0x02
+   0348 F5                 1765 	push	af
+   0349 33                 1766 	inc	sp
+                           1767 ; genCall
+   034A CD 00 00           1768 	call	_set_sprite_tile
+   034D E8 02              1769 	lda	sp,2(sp)
+                           1770 ;	main.c 35
+                           1771 ; genIpush
+   034F 3E 03              1772 	ld	a,#0x03
+   0351 F5                 1773 	push	af
+   0352 33                 1774 	inc	sp
+                           1775 ; genIpush
+   0353 3E 03              1776 	ld	a,#0x03
+   0355 F5                 1777 	push	af
+   0356 33                 1778 	inc	sp
+                           1779 ; genCall
+   0357 CD 00 00           1780 	call	_set_sprite_tile
+   035A E8 02              1781 	lda	sp,2(sp)
+                           1782 ;	main.c 37
+                           1783 ; genIpush
+   035C 3E 04              1784 	ld	a,#0x04
+   035E F5                 1785 	push	af
+   035F 33                 1786 	inc	sp
+                           1787 ; genIpush
+   0360 3E 04              1788 	ld	a,#0x04
+   0362 F5                 1789 	push	af
+   0363 33                 1790 	inc	sp
+                           1791 ; genCall
+   0364 CD 00 00           1792 	call	_set_sprite_tile
+   0367 E8 02              1793 	lda	sp,2(sp)
+                           1794 ;	main.c 38
+                           1795 ; genIpush
+   0369 3E 05              1796 	ld	a,#0x05
+   036B F5                 1797 	push	af
+   036C 33                 1798 	inc	sp
+                           1799 ; genIpush
+   036D 3E 05              1800 	ld	a,#0x05
+   036F F5                 1801 	push	af
+   0370 33                 1802 	inc	sp
+                           1803 ; genCall
+   0371 CD 00 00           1804 	call	_set_sprite_tile
+   0374 E8 02              1805 	lda	sp,2(sp)
+                           1806 ;	main.c 39
+                           1807 ; genIpush
+   0376 3E 06              1808 	ld	a,#0x06
+   0378 F5                 1809 	push	af
+   0379 33                 1810 	inc	sp
+                           1811 ; genIpush
+   037A 3E 06              1812 	ld	a,#0x06
+   037C F5                 1813 	push	af
+   037D 33                 1814 	inc	sp
+                           1815 ; genCall
+   037E CD 00 00           1816 	call	_set_sprite_tile
+   0381 E8 02              1817 	lda	sp,2(sp)
+                           1818 ;	main.c 40
+                           1819 ; genIpush
+   0383 3E 07              1820 	ld	a,#0x07
+   0385 F5                 1821 	push	af
+   0386 33                 1822 	inc	sp
+                           1823 ; genIpush
+   0387 3E 07              1824 	ld	a,#0x07
+   0389 F5                 1825 	push	af
+   038A 33                 1826 	inc	sp
+                           1827 ; genCall
+   038B CD 00 00           1828 	call	_set_sprite_tile
+   038E E8 02              1829 	lda	sp,2(sp)
+                           1830 ;	main.c 42
+                           1831 ; genIpush
+   0390 3E 04              1832 	ld	a,#0x04
+   0392 F5                 1833 	push	af
+   0393 33                 1834 	inc	sp
+                           1835 ; genIpush
+   0394 3E 08              1836 	ld	a,#0x08
+   0396 F5                 1837 	push	af
+   0397 33                 1838 	inc	sp
+                           1839 ; genCall
+   0398 CD 00 00           1840 	call	_set_sprite_tile
+   039B E8 02              1841 	lda	sp,2(sp)
+                           1842 ;	main.c 43
+                           1843 ; genIpush
+   039D 3E 05              1844 	ld	a,#0x05
+   039F F5                 1845 	push	af
+   03A0 33                 1846 	inc	sp
+                           1847 ; genIpush
+   03A1 3E 09              1848 	ld	a,#0x09
+   03A3 F5                 1849 	push	af
+   03A4 33                 1850 	inc	sp
+                           1851 ; genCall
+   03A5 CD 00 00           1852 	call	_set_sprite_tile
+   03A8 E8 02              1853 	lda	sp,2(sp)
+                           1854 ;	main.c 44
+                           1855 ; genIpush
+   03AA 3E 06              1856 	ld	a,#0x06
+   03AC F5                 1857 	push	af
+   03AD 33                 1858 	inc	sp
+                           1859 ; genIpush
+   03AE 3E 0A              1860 	ld	a,#0x0A
+   03B0 F5                 1861 	push	af
+   03B1 33                 1862 	inc	sp
+                           1863 ; genCall
+   03B2 CD 00 00           1864 	call	_set_sprite_tile
+   03B5 E8 02              1865 	lda	sp,2(sp)
+                           1866 ;	main.c 45
+                           1867 ; genIpush
+   03B7 3E 07              1868 	ld	a,#0x07
+   03B9 F5                 1869 	push	af
+   03BA 33                 1870 	inc	sp
+                           1871 ; genIpush
+   03BB 3E 0B              1872 	ld	a,#0x0B
+   03BD F5                 1873 	push	af
+   03BE 33                 1874 	inc	sp
+                           1875 ; genCall
+   03BF CD 00 00           1876 	call	_set_sprite_tile
+   03C2 E8 02              1877 	lda	sp,2(sp)
+                           1878 ;	main.c 47
+                           1879 ; genIpush
+   03C4 3E 00              1880 	ld	a,#0x00
+   03C6 F5                 1881 	push	af
+   03C7 33                 1882 	inc	sp
+                           1883 ; genIpush
+   03C8 3E 0C              1884 	ld	a,#0x0C
+   03CA F5                 1885 	push	af
+   03CB 33                 1886 	inc	sp
+                           1887 ; genCall
+   03CC CD 00 00           1888 	call	_set_sprite_tile
+   03CF E8 02              1889 	lda	sp,2(sp)
+                           1890 ;	main.c 48
+                           1891 ; genIpush
+   03D1 3E 01              1892 	ld	a,#0x01
+   03D3 F5                 1893 	push	af
+   03D4 33                 1894 	inc	sp
+                           1895 ; genIpush
+   03D5 3E 0D              1896 	ld	a,#0x0D
+   03D7 F5                 1897 	push	af
+   03D8 33                 1898 	inc	sp
+                           1899 ; genCall
+   03D9 CD 00 00           1900 	call	_set_sprite_tile
+   03DC E8 02              1901 	lda	sp,2(sp)
+                           1902 ;	main.c 49
+                           1903 ; genIpush
+   03DE 3E 02              1904 	ld	a,#0x02
+   03E0 F5                 1905 	push	af
+   03E1 33                 1906 	inc	sp
+                           1907 ; genIpush
+   03E2 3E 0E              1908 	ld	a,#0x0E
+   03E4 F5                 1909 	push	af
+   03E5 33                 1910 	inc	sp
+                           1911 ; genCall
+   03E6 CD 00 00           1912 	call	_set_sprite_tile
+   03E9 E8 02              1913 	lda	sp,2(sp)
+                           1914 ;	main.c 50
+                           1915 ; genIpush
+   03EB 3E 03              1916 	ld	a,#0x03
+   03ED F5                 1917 	push	af
+   03EE 33                 1918 	inc	sp
+                           1919 ; genIpush
+   03EF 3E 0F              1920 	ld	a,#0x0F
+   03F1 F5                 1921 	push	af
+   03F2 33                 1922 	inc	sp
+                           1923 ; genCall
+   03F3 CD 00 00           1924 	call	_set_sprite_tile
+   03F6 E8 02              1925 	lda	sp,2(sp)
+                           1926 ;	main.c 52
+                           1927 ; genIpush
+   03F8 3E 10              1928 	ld	a,#0x10
+   03FA F5                 1929 	push	af
+   03FB 33                 1930 	inc	sp
+                           1931 ; genIpush
+   03FC 3E 50              1932 	ld	a,#0x50
+   03FE F5                 1933 	push	af
+   03FF 33                 1934 	inc	sp
+                           1935 ; genIpush
+   0400 3E 00              1936 	ld	a,#0x00
+   0402 F5                 1937 	push	af
+   0403 33                 1938 	inc	sp
+                           1939 ; genCall
+   0404 CD 00 00           1940 	call	_move_sprite
+   0407 E8 03              1941 	lda	sp,3(sp)
+                           1942 ;	main.c 53
+                           1943 ; genIpush
+   0409 3E 18              1944 	ld	a,#0x18
+   040B F5                 1945 	push	af
+   040C 33                 1946 	inc	sp
+                           1947 ; genIpush
+   040D 3E 50              1948 	ld	a,#0x50
+   040F F5                 1949 	push	af
+   0410 33                 1950 	inc	sp
+                           1951 ; genIpush
+   0411 3E 01              1952 	ld	a,#0x01
+   0413 F5                 1953 	push	af
+   0414 33                 1954 	inc	sp
+                           1955 ; genCall
+   0415 CD 00 00           1956 	call	_move_sprite
+   0418 E8 03              1957 	lda	sp,3(sp)
+                           1958 ;	main.c 54
+                           1959 ; genIpush
+   041A 3E 10              1960 	ld	a,#0x10
+   041C F5                 1961 	push	af
+   041D 33                 1962 	inc	sp
+                           1963 ; genIpush
+   041E 3E 58              1964 	ld	a,#0x58
+   0420 F5                 1965 	push	af
+   0421 33                 1966 	inc	sp
+                           1967 ; genIpush
+   0422 3E 02              1968 	ld	a,#0x02
+   0424 F5                 1969 	push	af
+   0425 33                 1970 	inc	sp
+                           1971 ; genCall
+   0426 CD 00 00           1972 	call	_move_sprite
+   0429 E8 03              1973 	lda	sp,3(sp)
+                           1974 ;	main.c 55
+                           1975 ; genIpush
+   042B 3E 18              1976 	ld	a,#0x18
+   042D F5                 1977 	push	af
+   042E 33                 1978 	inc	sp
+                           1979 ; genIpush
+   042F 3E 58              1980 	ld	a,#0x58
+   0431 F5                 1981 	push	af
+   0432 33                 1982 	inc	sp
+                           1983 ; genIpush
+   0433 3E 03              1984 	ld	a,#0x03
+   0435 F5                 1985 	push	af
+   0436 33                 1986 	inc	sp
+                           1987 ; genCall
+   0437 CD 00 00           1988 	call	_move_sprite
+   043A E8 03              1989 	lda	sp,3(sp)
+                           1990 ;	main.c 57
+                           1991 ; genIpush
+   043C 3E 50              1992 	ld	a,#0x50
+   043E F5                 1993 	push	af
+   043F 33                 1994 	inc	sp
+                           1995 ; genIpush
+   0440 3E 08              1996 	ld	a,#0x08
+   0442 F5                 1997 	push	af
+   0443 33                 1998 	inc	sp
+                           1999 ; genIpush
+   0444 3E 04              2000 	ld	a,#0x04
+   0446 F5                 2001 	push	af
+   0447 33                 2002 	inc	sp
+                           2003 ; genCall
+   0448 CD 00 00           2004 	call	_move_sprite
+   044B E8 03              2005 	lda	sp,3(sp)
+                           2006 ;	main.c 58
+                           2007 ; genIpush
+   044D 3E 58              2008 	ld	a,#0x58
+   044F F5                 2009 	push	af
+   0450 33                 2010 	inc	sp
+                           2011 ; genIpush
+   0451 3E 08              2012 	ld	a,#0x08
+   0453 F5                 2013 	push	af
+   0454 33                 2014 	inc	sp
+                           2015 ; genIpush
+   0455 3E 05              2016 	ld	a,#0x05
+   0457 F5                 2017 	push	af
+   0458 33                 2018 	inc	sp
+                           2019 ; genCall
+   0459 CD 00 00           2020 	call	_move_sprite
+   045C E8 03              2021 	lda	sp,3(sp)
+                           2022 ;	main.c 59
+                           2023 ; genIpush
+   045E 3E 50              2024 	ld	a,#0x50
+   0460 F5                 2025 	push	af
+   0461 33                 2026 	inc	sp
+                           2027 ; genIpush
+   0462 3E 10              2028 	ld	a,#0x10
+   0464 F5                 2029 	push	af
+   0465 33                 2030 	inc	sp
+                           2031 ; genIpush
+   0466 3E 06              2032 	ld	a,#0x06
+   0468 F5                 2033 	push	af
+   0469 33                 2034 	inc	sp
+                           2035 ; genCall
+   046A CD 00 00           2036 	call	_move_sprite
+   046D E8 03              2037 	lda	sp,3(sp)
+                           2038 ;	main.c 60
+                           2039 ; genIpush
+   046F 3E 58              2040 	ld	a,#0x58
+   0471 F5                 2041 	push	af
+   0472 33                 2042 	inc	sp
+                           2043 ; genIpush
+   0473 3E 10              2044 	ld	a,#0x10
+   0475 F5                 2045 	push	af
+   0476 33                 2046 	inc	sp
+                           2047 ; genIpush
+   0477 3E 07              2048 	ld	a,#0x07
+   0479 F5                 2049 	push	af
+   047A 33                 2050 	inc	sp
+                           2051 ; genCall
+   047B CD 00 00           2052 	call	_move_sprite
+   047E E8 03              2053 	lda	sp,3(sp)
+                           2054 ;	main.c 62
+                           2055 ; genIpush
+   0480 3E 50              2056 	ld	a,#0x50
+   0482 F5                 2057 	push	af
+   0483 33                 2058 	inc	sp
+                           2059 ; genIpush
+   0484 3E A0              2060 	ld	a,#0xA0
+   0486 F5                 2061 	push	af
+   0487 33                 2062 	inc	sp
+                           2063 ; genIpush
+   0488 3E 08              2064 	ld	a,#0x08
+   048A F5                 2065 	push	af
+   048B 33                 2066 	inc	sp
+                           2067 ; genCall
+   048C CD 00 00           2068 	call	_move_sprite
+   048F E8 03              2069 	lda	sp,3(sp)
+                           2070 ;	main.c 63
+                           2071 ; genIpush
+   0491 3E 58              2072 	ld	a,#0x58
+   0493 F5                 2073 	push	af
+   0494 33                 2074 	inc	sp
+                           2075 ; genIpush
+   0495 3E A0              2076 	ld	a,#0xA0
+   0497 F5                 2077 	push	af
+   0498 33                 2078 	inc	sp
+                           2079 ; genIpush
+   0499 3E 09              2080 	ld	a,#0x09
+   049B F5                 2081 	push	af
+   049C 33                 2082 	inc	sp
+                           2083 ; genCall
+   049D CD 00 00           2084 	call	_move_sprite
+   04A0 E8 03              2085 	lda	sp,3(sp)
+                           2086 ;	main.c 64
+                           2087 ; genIpush
+   04A2 3E 50              2088 	ld	a,#0x50
+   04A4 F5                 2089 	push	af
+   04A5 33                 2090 	inc	sp
+                           2091 ; genIpush
+   04A6 3E 98              2092 	ld	a,#0x98
+   04A8 F5                 2093 	push	af
+   04A9 33                 2094 	inc	sp
+                           2095 ; genIpush
+   04AA 3E 0A              2096 	ld	a,#0x0A
+   04AC F5                 2097 	push	af
+   04AD 33                 2098 	inc	sp
+                           2099 ; genCall
+   04AE CD 00 00           2100 	call	_move_sprite
+   04B1 E8 03              2101 	lda	sp,3(sp)
+                           2102 ;	main.c 65
+                           2103 ; genIpush
+   04B3 3E 58              2104 	ld	a,#0x58
+   04B5 F5                 2105 	push	af
+   04B6 33                 2106 	inc	sp
+                           2107 ; genIpush
+   04B7 3E 98              2108 	ld	a,#0x98
+   04B9 F5                 2109 	push	af
+   04BA 33                 2110 	inc	sp
+                           2111 ; genIpush
+   04BB 3E 0B              2112 	ld	a,#0x0B
+   04BD F5                 2113 	push	af
+   04BE 33                 2114 	inc	sp
+                           2115 ; genCall
+   04BF CD 00 00           2116 	call	_move_sprite
+   04C2 E8 03              2117 	lda	sp,3(sp)
+                           2118 ;	main.c 66
+                           2119 ; genIpush
+   04C4 3E 20              2120 	ld	a,#0x20
+   04C6 F5                 2121 	push	af
+   04C7 33                 2122 	inc	sp
+                           2123 ; genIpush
+   04C8 3E 08              2124 	ld	a,#0x08
+   04CA F5                 2125 	push	af
+   04CB 33                 2126 	inc	sp
+                           2127 ; genCall
+   04CC CD 00 00           2128 	call	_set_sprite_prop
+   04CF E8 02              2129 	lda	sp,2(sp)
+                           2130 ;	main.c 67
+                           2131 ; genIpush
+   04D1 3E 20              2132 	ld	a,#0x20
+   04D3 F5                 2133 	push	af
+   04D4 33                 2134 	inc	sp
+                           2135 ; genIpush
+   04D5 3E 09              2136 	ld	a,#0x09
+   04D7 F5                 2137 	push	af
+   04D8 33                 2138 	inc	sp
+                           2139 ; genCall
+   04D9 CD 00 00           2140 	call	_set_sprite_prop
+   04DC E8 02              2141 	lda	sp,2(sp)
+                           2142 ;	main.c 68
+                           2143 ; genIpush
+   04DE 3E 20              2144 	ld	a,#0x20
+   04E0 F5                 2145 	push	af
+   04E1 33                 2146 	inc	sp
+                           2147 ; genIpush
+   04E2 3E 0A              2148 	ld	a,#0x0A
+   04E4 F5                 2149 	push	af
+   04E5 33                 2150 	inc	sp
+                           2151 ; genCall
+   04E6 CD 00 00           2152 	call	_set_sprite_prop
+   04E9 E8 02              2153 	lda	sp,2(sp)
+                           2154 ;	main.c 69
+                           2155 ; genIpush
+   04EB 3E 20              2156 	ld	a,#0x20
+   04ED F5                 2157 	push	af
+   04EE 33                 2158 	inc	sp
+                           2159 ; genIpush
+   04EF 3E 0B              2160 	ld	a,#0x0B
+   04F1 F5                 2161 	push	af
+   04F2 33                 2162 	inc	sp
+                           2163 ; genCall
+   04F3 CD 00 00           2164 	call	_set_sprite_prop
+   04F6 E8 02              2165 	lda	sp,2(sp)
+                           2166 ;	main.c 71
+                           2167 ; genIpush
+   04F8 3E 98              2168 	ld	a,#0x98
+   04FA F5                 2169 	push	af
+   04FB 33                 2170 	inc	sp
+                           2171 ; genIpush
+   04FC 3E 50              2172 	ld	a,#0x50
+   04FE F5                 2173 	push	af
+   04FF 33                 2174 	inc	sp
+                           2175 ; genIpush
+   0500 3E 0C              2176 	ld	a,#0x0C
+   0502 F5                 2177 	push	af
+   0503 33                 2178 	inc	sp
+                           2179 ; genCall
+   0504 CD 00 00           2180 	call	_move_sprite
+   0507 E8 03              2181 	lda	sp,3(sp)
+                           2182 ;	main.c 72
+                           2183 ; genIpush
+   0509 3E 90              2184 	ld	a,#0x90
+   050B F5                 2185 	push	af
+   050C 33                 2186 	inc	sp
+                           2187 ; genIpush
+   050D 3E 50              2188 	ld	a,#0x50
+   050F F5                 2189 	push	af
+   0510 33                 2190 	inc	sp
+                           2191 ; genIpush
+   0511 3E 0D              2192 	ld	a,#0x0D
+   0513 F5                 2193 	push	af
+   0514 33                 2194 	inc	sp
+                           2195 ; genCall
+   0515 CD 00 00           2196 	call	_move_sprite
+   0518 E8 03              2197 	lda	sp,3(sp)
+                           2198 ;	main.c 73
+                           2199 ; genIpush
+   051A 3E 98              2200 	ld	a,#0x98
+   051C F5                 2201 	push	af
+   051D 33                 2202 	inc	sp
+                           2203 ; genIpush
+   051E 3E 58              2204 	ld	a,#0x58
+   0520 F5                 2205 	push	af
+   0521 33                 2206 	inc	sp
+                           2207 ; genIpush
+   0522 3E 0E              2208 	ld	a,#0x0E
+   0524 F5                 2209 	push	af
+   0525 33                 2210 	inc	sp
+                           2211 ; genCall
+   0526 CD 00 00           2212 	call	_move_sprite
+   0529 E8 03              2213 	lda	sp,3(sp)
+                           2214 ;	main.c 74
+                           2215 ; genIpush
+   052B 3E 90              2216 	ld	a,#0x90
+   052D F5                 2217 	push	af
+   052E 33                 2218 	inc	sp
+                           2219 ; genIpush
+   052F 3E 58              2220 	ld	a,#0x58
+   0531 F5                 2221 	push	af
+   0532 33                 2222 	inc	sp
+                           2223 ; genIpush
+   0533 3E 0F              2224 	ld	a,#0x0F
+   0535 F5                 2225 	push	af
+   0536 33                 2226 	inc	sp
+                           2227 ; genCall
+   0537 CD 00 00           2228 	call	_move_sprite
+   053A E8 03              2229 	lda	sp,3(sp)
+                           2230 ;	main.c 75
+                           2231 ; genIpush
+   053C 3E 40              2232 	ld	a,#0x40
+   053E F5                 2233 	push	af
+   053F 33                 2234 	inc	sp
+                           2235 ; genIpush
+   0540 3E 0C              2236 	ld	a,#0x0C
+   0542 F5                 2237 	push	af
+   0543 33                 2238 	inc	sp
+                           2239 ; genCall
+   0544 CD 00 00           2240 	call	_set_sprite_prop
+   0547 E8 02              2241 	lda	sp,2(sp)
+                           2242 ;	main.c 76
+                           2243 ; genIpush
+   0549 3E 40              2244 	ld	a,#0x40
+   054B F5                 2245 	push	af
+   054C 33                 2246 	inc	sp
+                           2247 ; genIpush
+   054D 3E 0D              2248 	ld	a,#0x0D
+   054F F5                 2249 	push	af
+   0550 33                 2250 	inc	sp
+                           2251 ; genCall
+   0551 CD 00 00           2252 	call	_set_sprite_prop
+   0554 E8 02              2253 	lda	sp,2(sp)
+                           2254 ;	main.c 77
+                           2255 ; genIpush
+   0556 3E 40              2256 	ld	a,#0x40
+   0558 F5                 2257 	push	af
+   0559 33                 2258 	inc	sp
+                           2259 ; genIpush
+   055A 3E 0E              2260 	ld	a,#0x0E
+   055C F5                 2261 	push	af
+   055D 33                 2262 	inc	sp
+                           2263 ; genCall
+   055E CD 00 00           2264 	call	_set_sprite_prop
+   0561 E8 02              2265 	lda	sp,2(sp)
+                           2266 ;	main.c 78
+                           2267 ; genIpush
+   0563 3E 40              2268 	ld	a,#0x40
+   0565 F5                 2269 	push	af
+   0566 33                 2270 	inc	sp
+                           2271 ; genIpush
+   0567 3E 0F              2272 	ld	a,#0x0F
+   0569 F5                 2273 	push	af
+   056A 33                 2274 	inc	sp
+                           2275 ; genCall
+   056B CD 00 00           2276 	call	_set_sprite_prop
+   056E E8 02              2277 	lda	sp,2(sp)
+                           2278 ;	main.c 84
+                           2279 ; genOr
+                           2280 ; AOP_SFR for _LCDC_REG
+                           2281 ; Type res[4] = l[4]&r[1]
+                           2282 ; Size res[1] = l[1]&r[1]
+   0570 F0 00              2283 	ldh	a,(_LCDC_REG+0) ; x
+   0572 F6 01              2284 	or	a,#0x01
+   0574 E0 00              2285 	ldh	(_LCDC_REG+0),a
+                           2286 ;	main.c 85
+                           2287 ; genOr
+                           2288 ; AOP_SFR for _LCDC_REG
+                           2289 ; Type res[4] = l[4]&r[1]
+                           2290 ; Size res[1] = l[1]&r[1]
+   0576 F0 00              2291 	ldh	a,(_LCDC_REG+0) ; x
+   0578 F6 80              2292 	or	a,#0x80
+   057A E0 00              2293 	ldh	(_LCDC_REG+0),a
+                           2294 ;	main.c 86
+                           2295 ; genOr
+                           2296 ; AOP_SFR for _LCDC_REG
+                           2297 ; Type res[4] = l[4]&r[1]
+                           2298 ; Size res[1] = l[1]&r[1]
+   057C F0 00              2299 	ldh	a,(_LCDC_REG+0) ; x
+   057E F6 02              2300 	or	a,#0x02
+   0580 E0 00              2301 	ldh	(_LCDC_REG+0),a
+                           2302 ;	main.c 89
+                           2303 ; genLabel
+   0582                    2304 00102$:
+                           2305 ; genGoto
+   0582 C3 82 05           2306 	jp	00102$
+                           2307 ; genLabel
+   0585                    2308 00104$:
+                           2309 ; genEndFunction
+                           2310 	
+   0585 C9                 2311 	ret
+   0586                    2312 ___main_end:
+                           2313 	.area _CODE
+ASxxxx Assembler V01.75  (GameBoy Z80-like CPU), page 1.
+
+Symbol Table
+
+    _BCPD_REG                          **** GX
+    _BCPS_REG                          **** GX
+    _BGP_REG                           **** GX
+    _DIV_REG                           **** GX
+    _DMA_REG                           **** GX
+    _HDMA1_REG                         **** GX
+    _HDMA2_REG                         **** GX
+    _HDMA3_REG                         **** GX
+    _HDMA4_REG                         **** GX
+    _HDMA5_REG                         **** GX
+    _IE_REG                            **** GX
+    _IF_REG                            **** GX
+    _KEY1_REG                          **** GX
+    _LCDC_REG                          **** GX
+    _LYC_REG                           **** GX
+    _LY_REG                            **** GX
+    _NR10_REG                          **** GX
+    _NR11_REG                          **** GX
+    _NR12_REG                          **** GX
+    _NR13_REG                          **** GX
+    _NR14_REG                          **** GX
+    _NR21_REG                          **** GX
+    _NR22_REG                          **** GX
+    _NR23_REG                          **** GX
+    _NR24_REG                          **** GX
+    _NR30_REG                          **** GX
+    _NR31_REG                          **** GX
+    _NR32_REG                          **** GX
+    _NR33_REG                          **** GX
+    _NR34_REG                          **** GX
+    _NR41_REG                          **** GX
+    _NR42_REG                          **** GX
+    _NR43_REG                          **** GX
+    _NR44_REG                          **** GX
+    _NR50_REG                          **** GX
+    _NR51_REG                          **** GX
+    _NR52_REG                          **** GX
+    _OBP0_REG                          **** GX
+    _OBP1_REG                          **** GX
+    _OCPD_REG                          **** GX
+    _OCPS_REG                          **** GX
+    _P1_REG                            **** GX
+    _RP_REG                            **** GX
+    _SB_REG                            **** GX
+    _SCX_REG                           **** GX
+    _SCY_REG                           **** GX
+    _SC_REG                            **** GX
+    _STAT_REG                          **** GX
+    _SVBK_REG                          **** GX
+    _TAC_REG                           **** GX
+    _TIMA_REG                          **** GX
+    _TMA_REG                           **** GX
+    _VBK_REG                           **** GX
+    _WX_REG                            **** GX
+    _WY_REG                            **** GX
+  0 ___main_end                        0586 R
+  0 ___main_start                      02DC R
+  0 ___pdelay_end                      0014 R
+  0 ___pdelay_start                    0000 R
+    __cpu                              **** GX
+    __io_in                            **** GX
+    __io_out                           **** GX
+    __io_status                        **** GX
+  0 _background_data                   0014 GR
+  0 _background_map                    0174 GR
+  1 _door                              0000 GR
+  1 _doorLeft                          0040 GR
+    _font_ibm                          **** GX
+    _font_ibm_fixed                    **** GX
+    _font_italic                       **** GX
+    _font_min                          **** GX
+    _font_spect                        **** GX
+  0 _main                              02DC GR
+    _move_sprite                       **** GX
+  0 _pdelay                            0000 GR
+    _set_bkg_data                      **** GX
+    _set_bkg_tiles                     **** GX
+    _set_sprite_data                   **** GX
+    _set_sprite_prop                   **** GX
+    _set_sprite_tile                   **** GX
+    _sys_time                          **** GX
+    _wait_vbl_done                     **** GX
+
+ASxxxx Assembler V01.75  (GameBoy Z80-like CPU), page 2.
+
+Area Table
+
+   0 _CODE                              size  586   flags 0
+   1 _DATA                              size   80   flags 0
+   2 _OVERLAY                           size    0   flags 0
+   3 _ISEG                              size    0   flags 0
+   4 _BSEG                              size    0   flags 0
+   5 _XSEG                              size    0   flags 0
+   6 _GSINIT                            size  300   flags 0
+   7 _GSFINAL                           size    0   flags 0
+   8 _HOME                              size    0   flags 0
