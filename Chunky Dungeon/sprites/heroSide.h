@@ -1,6 +1,6 @@
 /*
 
- HERO.H
+ HEROSIDE.H
 
  Include File.
 
@@ -24,8 +24,8 @@
 
 
 /* Bank of tiles. */
-#define heroBank 0
+#define heroSideBank 0
 /* Start of tile array. */
-extern unsigned char hero[];
+extern unsigned char heroSide[];
 
-/* End of HERO.H */
+/* End of HEROSIDE.H */

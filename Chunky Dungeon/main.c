@@ -6,7 +6,8 @@
 
 #include "sprites/door.c"
 #include "sprites/doorLeft.c"
-#include "sprites/hero.c"
+#include "sprites/heroSide.c"
+#include "sprites/heroIdle.c"
 
 void pdelay(UINT8 numloops) {
 	UINT8 i;
@@ -46,11 +47,11 @@ BOOLEAN canWalk( UINT8 direction, UINT8 posx, UINT8 posy){
 void main() {
 
 
-	UINT8 posx=80;
-	UINT8 posy=88;
-	UINT8 spriteindex=6;
-
-
+	UINT8 posx = 80;
+	UINT8 posy = 88;
+	UINT8 spriteindex = 6;
+	UINT8 direction = 2;
+	BOOLEAN playIdle = 0;
 	//font_t font;
 	//font_init();
 	//font = font_load(font_ibm);
@@ -63,7 +64,8 @@ void main() {
 
 	set_sprite_data(0, 4, door);
 	set_sprite_data(4, 4, doorLeft);
-	set_sprite_data(8, 12, hero);
+	set_sprite_data(8, 12, heroSide);
+	set_sprite_data(20, 16, heroIdle);
 
 	set_sprite_tile(0, 0);//door up
 	set_sprite_tile(1, 1);
@@ -132,23 +134,91 @@ void main() {
 	
 
 
-	while (1) {
+while (1) {
+	if (spriteindex == 40) {
+		spriteindex = 0;
+	}
+
 	if(joypad() & J_LEFT){
+		direction = 1;
 		if(canWalk(1, posx, posy)==1){
 			posx=posx-1;
 			move_sprite(16,posx,posy);
 			move_sprite(17,posx,posy+8);
 			move_sprite(18,posx+8,posy);
 			move_sprite(19,posx+8,posy+8);
+			set_sprite_prop(16, S_FLIPX);
+			set_sprite_prop(17, S_FLIPX);
+			set_sprite_prop(18, S_FLIPX);
+			set_sprite_prop(19, S_FLIPX);
+			if (spriteindex >= 0 && spriteindex < 9) {
+				set_sprite_tile(16, 10);//hero
+				set_sprite_tile(17, 11);
+				set_sprite_tile(18, 8);
+				set_sprite_tile(19, 9);
+			}
+			else if (spriteindex >= 10 && spriteindex < 19) {
+				set_sprite_tile(16, 14);//hero
+				set_sprite_tile(17, 15);
+				set_sprite_tile(18, 12);
+				set_sprite_tile(19, 13);
+			}
+			else if (spriteindex >= 20 && spriteindex < 29) {
+				set_sprite_tile(16, 18);//hero
+				set_sprite_tile(17, 19);
+				set_sprite_tile(18, 16);
+				set_sprite_tile(19, 17);
+			}
+			else if (spriteindex >= 30) {
+				set_sprite_tile(16, 14);//hero
+				set_sprite_tile(17, 15);
+				set_sprite_tile(18, 12);
+				set_sprite_tile(19, 13);
+			}
+		}
+		else {
+			playIdle = 1;
 		}
 	}
 	if(joypad() & J_RIGHT){
+		direction = 2;
 		if(canWalk(2, posx, posy)==1){
 			posx=posx+1;
 			move_sprite(16,posx,posy);
 			move_sprite(17,posx,posy+8);
 			move_sprite(18,posx+8,posy);
 			move_sprite(19,posx+8,posy+8);
+			set_sprite_prop(16, !S_FLIPX);
+			set_sprite_prop(17, !S_FLIPX);
+			set_sprite_prop(18, !S_FLIPX);
+			set_sprite_prop(19, !S_FLIPX);
+			if (spriteindex>=0 && spriteindex<9) {
+				set_sprite_tile(16, 8);//hero
+				set_sprite_tile(17, 9);
+				set_sprite_tile(18, 10);
+				set_sprite_tile(19, 11);
+			}
+			else if (spriteindex >= 10 && spriteindex < 19) {
+				set_sprite_tile(16, 12);//hero
+				set_sprite_tile(17, 13);
+				set_sprite_tile(18, 14);
+				set_sprite_tile(19, 15);
+			}
+			else if (spriteindex >= 20 && spriteindex < 29) {
+				set_sprite_tile(16, 16);//hero
+				set_sprite_tile(17, 17);
+				set_sprite_tile(18, 18);
+				set_sprite_tile(19, 19);
+			}
+			else if (spriteindex >= 30) {
+				set_sprite_tile(16, 12);//hero
+				set_sprite_tile(17, 13);
+				set_sprite_tile(18, 14);
+				set_sprite_tile(19, 15);
+			}
+		}
+		else {
+			playIdle = 1;
 		}
 	}
 	if(joypad() & J_UP){
@@ -170,36 +240,72 @@ void main() {
 		}
 	}
 
-	if(spriteindex==64){
-		spriteindex=0;
+	if (!joypad() || playIdle==1) {//idle
+		if (direction == 1) {
+			set_sprite_prop(16, S_FLIPX);
+			set_sprite_prop(17, S_FLIPX);
+			set_sprite_prop(18, S_FLIPX);
+			set_sprite_prop(19, S_FLIPX);
+			if (spriteindex >= 0 && spriteindex < 9) {
+				set_sprite_tile(16, 22);//hero
+				set_sprite_tile(17, 23);
+				set_sprite_tile(18, 20);
+				set_sprite_tile(19, 21);
+			}
+			else if (spriteindex >= 10 && spriteindex < 19) {
+				set_sprite_tile(16, 26);//hero
+				set_sprite_tile(17, 27);
+				set_sprite_tile(18, 24);
+				set_sprite_tile(19, 25);
+			}
+			else if (spriteindex >= 20 && spriteindex < 29) {
+				set_sprite_tile(16, 30);//hero
+				set_sprite_tile(17, 31);
+				set_sprite_tile(18, 28);
+				set_sprite_tile(19, 29);
+			}
+			else if (spriteindex >= 30) {
+				set_sprite_tile(16, 34);//hero
+				set_sprite_tile(17, 35);
+				set_sprite_tile(18, 32);
+				set_sprite_tile(19, 33);
+			}
+		}
+		if(direction==2){
+			set_sprite_prop(16, !S_FLIPX);
+			set_sprite_prop(17, !S_FLIPX);
+			set_sprite_prop(18, !S_FLIPX);
+			set_sprite_prop(19, !S_FLIPX);
+			if (spriteindex >= 0 && spriteindex < 9) {
+				set_sprite_tile(16, 20);//hero
+				set_sprite_tile(17, 21);
+				set_sprite_tile(18, 22);
+				set_sprite_tile(19, 23);
+			}
+			else if (spriteindex >= 10 && spriteindex < 19) {
+				set_sprite_tile(16, 24);//hero
+				set_sprite_tile(17, 25);
+				set_sprite_tile(18, 26);
+				set_sprite_tile(19, 27);
+			}
+			else if (spriteindex >= 20 && spriteindex < 29) {
+				set_sprite_tile(16, 28);//hero
+				set_sprite_tile(17, 29);
+				set_sprite_tile(18, 30);
+				set_sprite_tile(19, 31);
+				}
+			else if (spriteindex >= 30) {
+				set_sprite_tile(16, 32);//hero
+				set_sprite_tile(17, 33);
+				set_sprite_tile(18, 34);
+				set_sprite_tile(19, 35);
+			}
+		}
 	}
-	if(spriteindex==0){
-		set_sprite_tile(16, 8);//hero
-		set_sprite_tile(17, 9);
-		set_sprite_tile(18, 10);
-		set_sprite_tile(19, 11);
-	}else if(spriteindex==16){
-		set_sprite_tile(16, 12);//hero
-		set_sprite_tile(17, 13);
-		set_sprite_tile(18, 14);
-		set_sprite_tile(19, 15);
-	}else if(spriteindex==32){
-		set_sprite_tile(16, 16);//hero
-		set_sprite_tile(17, 17);
-		set_sprite_tile(18, 18);
-		set_sprite_tile(19, 19);
-	}else if(spriteindex==48){
-		set_sprite_tile(16, 12);//hero
-		set_sprite_tile(17, 13);
-		set_sprite_tile(18, 14);
-		set_sprite_tile(19, 15);
-	}
+	
 
-
-		spriteindex++;
-		pdelay(1);
-	}
-
-
-
+	playIdle = 0;
+	spriteindex++;
+	pdelay(1);
+}
 }
