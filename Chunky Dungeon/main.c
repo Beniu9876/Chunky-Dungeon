@@ -8,6 +8,8 @@
 #include "sprites/doorLeft.c"
 #include "sprites/heroSide.c"
 #include "sprites/heroIdle.c"
+#include "sprites/heroDown.c"
+#include "sprites/heroUp.c"
 
 void pdelay(UINT8 numloops) {
 	UINT8 i;
@@ -52,6 +54,17 @@ void main() {
 	UINT8 spriteindex = 6;
 	UINT8 direction = 2;
 	BOOLEAN playIdle = 0;
+	UINT8 currentLevelX = 2;
+	UINT8 currentLevelY = 3;
+
+	UINT8 map[][]={
+		{0,0,0,0,0},
+		{0,2,0,1,0},
+		{0,1,1,1,0},
+		{0,0,1,0,0},
+		{0,0,0,0,0},
+	};
+
 	//font_t font;
 	//font_init();
 	//font = font_load(font_ibm);
@@ -66,6 +79,8 @@ void main() {
 	set_sprite_data(4, 4, doorLeft);
 	set_sprite_data(8, 12, heroSide);
 	set_sprite_data(20, 16, heroIdle);
+	set_sprite_data(36, 8, heroDown);
+	set_sprite_data(44, 8, heroUp);
 
 	set_sprite_tile(0, 0);//door up
 	set_sprite_tile(1, 1);
@@ -96,34 +111,33 @@ void main() {
 	move_sprite(1, 80, 24);
 	move_sprite(2, 88, 16);
 	move_sprite(3, 88, 24);
-	
-	move_sprite(4, 8, 80);//door left
-	move_sprite(5, 8, 88);
-	move_sprite(6, 16, 80);
-	move_sprite(7, 16, 88);
+	//move_sprite(4, 8, 80);//door left
+	//move_sprite(5, 8, 88);
+	//move_sprite(6, 16, 80);
+	//move_sprite(7, 16, 88);
 
-	move_sprite(8, 160, 80);//door right
-	move_sprite(9, 160, 88);
-	move_sprite(10, 152, 80);
-	move_sprite(11, 152, 88);
+	//move_sprite(8, 160, 80);//door right
+	//move_sprite(9, 160, 88);
+	//move_sprite(10, 152, 80);
+	//move_sprite(11, 152, 88);
 	set_sprite_prop(8, S_FLIPX);
 	set_sprite_prop(9, S_FLIPX);
 	set_sprite_prop(10, S_FLIPX);
 	set_sprite_prop(11, S_FLIPX);
 
-	move_sprite(12, 80, 152);//door down
-	move_sprite(13, 80, 144);
-	move_sprite(14, 88, 152);
-	move_sprite(15, 88, 144);
+	//move_sprite(12, 80, 152);//door down
+	//move_sprite(13, 80, 144);
+	//move_sprite(14, 88, 152);
+	//move_sprite(15, 88, 144);
 	set_sprite_prop(12, S_FLIPY);
 	set_sprite_prop(13, S_FLIPY);
 	set_sprite_prop(14, S_FLIPY);
 	set_sprite_prop(15, S_FLIPY);
 
-	move_sprite(16, 80, 88);//hero
-	move_sprite(17, 80, 96);
-	move_sprite(18, 88, 88);
-	move_sprite(19, 88, 96);
+	//move_sprite(16, 80, 88);//hero
+	//move_sprite(17, 80, 96);
+	//move_sprite(18, 88, 88);
+	//move_sprite(19, 88, 96);
 
 	
 	//SHOW_WIN;
@@ -138,15 +152,107 @@ while (1) {
 	if (spriteindex == 40) {
 		spriteindex = 0;
 	}
+	if(joypad() & J_UP){
+		if(canWalk(0, posx, posy)==1){
+			posy=posy-1;
+			if (spriteindex>=0 && spriteindex<9) {
+				set_sprite_tile(16, 46);//hero
+				set_sprite_tile(17, 47);
+				set_sprite_tile(18, 44);
+				set_sprite_tile(19, 45);
+				set_sprite_prop(16, S_FLIPX);
+				set_sprite_prop(17, S_FLIPX);
+				set_sprite_prop(18, S_FLIPX);
+				set_sprite_prop(19, S_FLIPX);
+			}
+			else if (spriteindex >= 10 && spriteindex < 19) {
+				set_sprite_tile(16, 50);//hero
+				set_sprite_tile(17, 51);
+				set_sprite_tile(18, 48);
+				set_sprite_tile(19, 49);
+				set_sprite_prop(16, S_FLIPX);
+				set_sprite_prop(17, S_FLIPX);
+				set_sprite_prop(18, S_FLIPX);
+				set_sprite_prop(19, S_FLIPX);
+			}
+			else if (spriteindex >= 20 && spriteindex < 29) {
+				set_sprite_tile(16, 44);//hero
+				set_sprite_tile(17, 45);
+				set_sprite_tile(18, 46);
+				set_sprite_tile(19, 47);
+				set_sprite_prop(16, !S_FLIPX);
+				set_sprite_prop(17, !S_FLIPX);
+				set_sprite_prop(18, !S_FLIPX);
+				set_sprite_prop(19, !S_FLIPX);
+			}
+			else if (spriteindex >= 30) {
+				set_sprite_tile(16, 48);//hero
+				set_sprite_tile(17, 49);
+				set_sprite_tile(18, 50);
+				set_sprite_tile(19, 51);
+				set_sprite_prop(16, !S_FLIPX);
+				set_sprite_prop(17, !S_FLIPX);
+				set_sprite_prop(18, !S_FLIPX);
+				set_sprite_prop(19, !S_FLIPX);
+			}
+		}
+		else {
+			playIdle = 1;
+		}
+	}
+	if(joypad() & J_DOWN){
+		if(canWalk(3, posx, posy)==1){
+			posy=posy+1;
+			if (spriteindex>=0 && spriteindex<9) {
+				set_sprite_tile(16, 38);//hero
+				set_sprite_tile(17, 39);
+				set_sprite_tile(18, 36);
+				set_sprite_tile(19, 37);
+				set_sprite_prop(16, S_FLIPX);
+				set_sprite_prop(17, S_FLIPX);
+				set_sprite_prop(18, S_FLIPX);
+				set_sprite_prop(19, S_FLIPX);
+			}
+			else if (spriteindex >= 10 && spriteindex < 19) {
+				set_sprite_tile(16, 42);//hero
+				set_sprite_tile(17, 43);
+				set_sprite_tile(18, 40);
+				set_sprite_tile(19, 41);
+				set_sprite_prop(16, S_FLIPX);
+				set_sprite_prop(17, S_FLIPX);
+				set_sprite_prop(18, S_FLIPX);
+				set_sprite_prop(19, S_FLIPX);
+			}
+			else if (spriteindex >= 20 && spriteindex < 29) {
+				set_sprite_tile(16, 36);//hero
+				set_sprite_tile(17, 37);
+				set_sprite_tile(18, 38);
+				set_sprite_tile(19, 39);
+				set_sprite_prop(16, !S_FLIPX);
+				set_sprite_prop(17, !S_FLIPX);
+				set_sprite_prop(18, !S_FLIPX);
+				set_sprite_prop(19, !S_FLIPX);
+			}
+			else if (spriteindex >= 30) {
+				set_sprite_tile(16, 40);//hero
+				set_sprite_tile(17, 41);
+				set_sprite_tile(18, 42);
+				set_sprite_tile(19, 43);
+				set_sprite_prop(16, !S_FLIPX);
+				set_sprite_prop(17, !S_FLIPX);
+				set_sprite_prop(18, !S_FLIPX);
+				set_sprite_prop(19, !S_FLIPX);
 
+			}
+		}
+		else {
+			playIdle = 1;
+		}
+	}
 	if(joypad() & J_LEFT){
 		direction = 1;
 		if(canWalk(1, posx, posy)==1){
 			posx=posx-1;
-			move_sprite(16,posx,posy);
-			move_sprite(17,posx,posy+8);
-			move_sprite(18,posx+8,posy);
-			move_sprite(19,posx+8,posy+8);
 			set_sprite_prop(16, S_FLIPX);
 			set_sprite_prop(17, S_FLIPX);
 			set_sprite_prop(18, S_FLIPX);
@@ -184,10 +290,6 @@ while (1) {
 		direction = 2;
 		if(canWalk(2, posx, posy)==1){
 			posx=posx+1;
-			move_sprite(16,posx,posy);
-			move_sprite(17,posx,posy+8);
-			move_sprite(18,posx+8,posy);
-			move_sprite(19,posx+8,posy+8);
 			set_sprite_prop(16, !S_FLIPX);
 			set_sprite_prop(17, !S_FLIPX);
 			set_sprite_prop(18, !S_FLIPX);
@@ -221,26 +323,11 @@ while (1) {
 			playIdle = 1;
 		}
 	}
-	if(joypad() & J_UP){
-		if(canWalk(0, posx, posy)==1){
-			posy=posy-1;
-			move_sprite(16,posx,posy);
-			move_sprite(17,posx,posy+8);
-			move_sprite(18,posx+8,posy);
-			move_sprite(19,posx+8,posy+8);
-		}
-	}
-	if(joypad() & J_DOWN){
-		if(canWalk(3, posx, posy)==1){
-			posy=posy+1;
-			move_sprite(16,posx,posy);
-			move_sprite(17,posx,posy+8);
-			move_sprite(18,posx+8,posy);
-			move_sprite(19,posx+8,posy+8);
-		}
-	}
-
-	if (!joypad() || playIdle==1) {//idle
+	move_sprite(16,posx,posy);
+	move_sprite(17,posx,posy+8);
+	move_sprite(18,posx+8,posy);
+	move_sprite(19,posx+8,posy+8);
+	if (!joypad() || (joypad() & J_A) || (joypad() & J_B) || playIdle==1) {//idle
 		if (direction == 1) {
 			set_sprite_prop(16, S_FLIPX);
 			set_sprite_prop(17, S_FLIPX);
@@ -302,7 +389,55 @@ while (1) {
 			}
 		}
 	}
-	
+
+	if(joypad() & J_B){
+		
+		if(map[currentLevelY-1][currentLevelX]==0){
+			move_sprite(0, 0, 0);//door up
+			move_sprite(1, 0, 0);
+			move_sprite(2, 0, 0);
+			move_sprite(3, 0, 0);
+		}else{
+			move_sprite(0, 80, 16);//door up
+			move_sprite(1, 80, 24);
+			move_sprite(2, 88, 16);
+			move_sprite(3, 88, 24);
+		}
+		if(map[currentLevelY+1][currentLevelX]==0){
+			move_sprite(12, 0, 0);//door down
+			move_sprite(13, 0, 0);
+			move_sprite(14, 0, 0);
+			move_sprite(15, 0, 0);
+		}else{
+			move_sprite(12, 80, 152);//door down
+			move_sprite(13, 80, 144);
+			move_sprite(14, 88, 152);
+			move_sprite(15, 88, 144);
+		}
+		if(map[currentLevelY][currentLevelX+1]==0){
+			move_sprite(8, 0, 0);//door right
+			move_sprite(9, 0, 0);
+			move_sprite(10, 0, 0);
+			move_sprite(11, 0, 0);
+		}else{
+			move_sprite(8, 160, 80);//door right
+			move_sprite(9, 160, 88);
+			move_sprite(10, 152, 80);
+			move_sprite(11, 152, 88);
+		}
+		if(map[currentLevelY][currentLevelX-1]==0){
+			move_sprite(4, 0, 0);//door left
+			move_sprite(5, 0, 0);
+			move_sprite(6, 0, 0);
+			move_sprite(7, 0, 0);
+		}else{
+			move_sprite(4, 8, 80);//door left
+			move_sprite(5, 8, 88);
+			move_sprite(6, 16, 80);
+			move_sprite(7, 16, 88);
+		}
+	}
+
 
 	playIdle = 0;
 	spriteindex++;

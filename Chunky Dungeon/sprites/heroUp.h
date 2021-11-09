@@ -1,6 +1,6 @@
 /*
 
- HEROSIDE.H
+ HEROUP.H
 
  Include File.
 
@@ -9,8 +9,8 @@
   Format               : Gameboy 4 color.
   Compression          : None.
   Counter              : None.
-  Tile size            : 16 x 16
-  Tiles                : 0 to 11
+  Tile size            : 8 x 8
+  Tiles                : 0 to 7
 
   Palette colors       : None.
   SGB Palette          : None.
@@ -24,8 +24,8 @@
 
 
 /* Bank of tiles. */
-#define heroSideBank 0
+#define heroUpBank 0
 /* Start of tile array. */
-extern unsigned char heroSide[];
+extern unsigned char heroUp[];
 
-/* End of HEROSIDE.H */
+/* End of HEROUP.H */
