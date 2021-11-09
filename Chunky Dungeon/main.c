@@ -3,6 +3,8 @@
 #include <gb/font.h>
 #include "backgrounds/background_data.c"
 #include "backgrounds/background_map.c"
+#include "Splash/Splashscreen_data.c"
+#include "Splash/Splashscreen_map.c"
 
 #include "sprites/door.c"
 #include "sprites/doorLeft.c"
@@ -64,6 +66,12 @@ void main() {
 		{0,0,1,0,0},
 		{0,0,0,0,0},
 	};
+
+	set_bkg_data(0, 180, Splashscreen_data);
+	set_bkg_tiles(0, 0, 20, 18, Splashscreen_map);
+	SHOW_BKG;
+	DISPLAY_ON;
+	waitpad(J_START);
 
 	//font_t font;
 	//font_init();
@@ -146,6 +154,8 @@ void main() {
 	SHOW_SPRITES;
 
 	
+	
+
 
 
 while (1) {

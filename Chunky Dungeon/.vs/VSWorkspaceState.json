@@ -2,8 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\backgrounds",
+    "\\Splash",
     "\\sprites"
   ],
-  "SelectedNode": "\\sprites\\heroUp.c",
+  "SelectedNode": "\\Splash\\Splashscreen_data.c",
   "PreviewInSolutionExplorer": false
 }
