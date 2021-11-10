@@ -61,6 +61,53 @@ UINT8 whereStandingDoor(UINT8 posx, UINT8 posy) {
 	return 4;
 }
 
+void fadeOut() {
+	UINT8 i = 0;
+	for (i = 0; i < 4; i++) {
+		switch (i) {
+		case 0: {
+			BGP_REG = 0xe4;
+			break;
+		}
+		case 1: {
+			BGP_REG = 0xf9;
+			break;
+		}
+		case 2: {
+			BGP_REG = 0xfe;
+			break;
+		}
+		case 3: {
+			BGP_REG = 0xff;
+			break;
+		}
+		}
+		pdelay(10);
+	}
+	pdelay(10);
+}
+void fadeIn() {
+	UINT8 i = 0;
+	for (i = 0; i < 3; i++) {
+		switch (i) {
+		case 0: {
+			BGP_REG = 0xfe;
+			break;
+		}
+		case 1: {
+			BGP_REG = 0xf9;
+			break;
+		}
+		case 2: {
+			BGP_REG = 0xe4;
+			break;
+		}
+		}
+		pdelay(10);
+	}
+	pdelay(10);
+}
+
 void main() {
 
 
@@ -87,6 +134,7 @@ void main() {
 	SHOW_BKG;
 	DISPLAY_ON;
 	waitpad(J_START);
+	fadeOut();
 
 	//font_t font;
 	//font_init();
@@ -97,7 +145,7 @@ void main() {
 
 	set_bkg_data(0, 22, background_data);
 	set_bkg_tiles(0, 0, 20, 18, background_map);
-
+	fadeIn();
 	set_sprite_data(0, 4, door);
 	set_sprite_data(4, 4, doorLeft);
 	set_sprite_data(8, 12, heroSide);
