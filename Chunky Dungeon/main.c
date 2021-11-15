@@ -49,11 +49,11 @@ BOOLEAN canWalk(UINT8 direction, UINT8 posx, UINT8 posy){
 }
 
 UINT8 whereStandingDoor(UINT8 posx, UINT8 posy) {
-	if (posx <= 96 && posx >= 72 && posy <= 32) {
+	if (posx <= 96 && posx >= 72 && posy < 40) {
 		return 0;
-	}else if (posx <= 32 && posy >= 72 && posy <= 96) {
+	}else if (posx <= 32 && posy >= 64 && posy <= 96) {
 		return 1;
-	}else if (posx >= 128 && posy >= 72 && posy <= 96) {
+	}else if (posx >= 128 && posy >= 64 && posy <= 96) {
 		return 2;
 	}else if (posx <= 96 && posx >= 72 && posy >= 120) {
 		return 3;
@@ -488,36 +488,119 @@ while (1) {
 		if (whereStandingDoor(posx, posy) == 0) {
 			if (map[currentLevelY - 1][currentLevelX] != 0) {
 				currentLevelY--;
-				posy = 80;
+				move_sprite(0, 0, 0);
+				move_sprite(1, 0, 0);
+				move_sprite(2, 0, 0);
+				move_sprite(3, 0, 0);
+				move_sprite(4, 0, 0);
+				move_sprite(5, 0, 0);
+				move_sprite(6, 0, 0);
+				move_sprite(7, 0, 0);
+				move_sprite(8, 0, 0);
+				move_sprite(9, 0, 0);
+				move_sprite(10, 0, 0);
+				move_sprite(11, 0, 0);
+				move_sprite(12, 0, 0);
+				move_sprite(13, 0, 0);
+				move_sprite(14, 0, 0);
+				move_sprite(15, 0, 0);
+				move_sprite(16, 0, 0);
+				move_sprite(17, 0, 0);
+				move_sprite(18, 0, 0);
+				move_sprite(19, 0, 0);
+				fadeOut();
+				posy = 128;
 				posx = 80;
-				pdelay(15);
+				fadeIn();
 			}
 		}
-		if (whereStandingDoor(posx, posy) == 1) {
+		else if (whereStandingDoor(posx, posy) == 1) {
 			if (map[currentLevelY][currentLevelX - 1] != 0) {
 				currentLevelX--;
-				posy = 88;
-				posx = 80;
-				pdelay(15);
+				move_sprite(0, 0, 0);
+				move_sprite(1, 0, 0);
+				move_sprite(2, 0, 0);
+				move_sprite(3, 0, 0);
+				move_sprite(4, 0, 0);
+				move_sprite(5, 0, 0);
+				move_sprite(6, 0, 0);
+				move_sprite(7, 0, 0);
+				move_sprite(8, 0, 0);
+				move_sprite(9, 0, 0);
+				move_sprite(10, 0, 0);
+				move_sprite(11, 0, 0);
+				move_sprite(12, 0, 0);
+				move_sprite(13, 0, 0);
+				move_sprite(14, 0, 0);
+				move_sprite(15, 0, 0);
+				move_sprite(16, 0, 0);
+				move_sprite(17, 0, 0);
+				move_sprite(18, 0, 0);
+				move_sprite(19, 0, 0);
+				fadeOut();
+				posy = 80;
+				posx = 136;
+				fadeIn();
 			}
 		}
-		if (whereStandingDoor(posx, posy) == 2) {
+		else if (whereStandingDoor(posx, posy) == 2) {
 			if (map[currentLevelY ][currentLevelX + 1] != 0) {
 				currentLevelX++;
+				move_sprite(0, 0, 0);
+				move_sprite(1, 0, 0);
+				move_sprite(2, 0, 0);
+				move_sprite(3, 0, 0);
+				move_sprite(4, 0, 0);
+				move_sprite(5, 0, 0);
+				move_sprite(6, 0, 0);
+				move_sprite(7, 0, 0);
+				move_sprite(8, 0, 0);
+				move_sprite(9, 0, 0);
+				move_sprite(10, 0, 0);
+				move_sprite(11, 0, 0);
+				move_sprite(12, 0, 0);
+				move_sprite(13, 0, 0);
+				move_sprite(14, 0, 0);
+				move_sprite(15, 0, 0);
+				move_sprite(16, 0, 0);
+				move_sprite(17, 0, 0);
+				move_sprite(18, 0, 0);
+				move_sprite(19, 0, 0);
+				fadeOut();
 				posy = 80;
-				posx = 88;
-				pdelay(15);
+				posx = 24;
+				fadeIn();
 			}
 		}
-		if (whereStandingDoor(posx, posy) == 3) {
+		else if (whereStandingDoor(posx, posy) == 3) {
 			if (map[currentLevelY + 1][currentLevelX] != 0) {
 				currentLevelY++;
-				posy = 88;
-				posx = 88;
-				pdelay(15);
+				move_sprite(0, 0, 0);
+				move_sprite(1, 0, 0);
+				move_sprite(2, 0, 0);
+				move_sprite(3, 0, 0);
+				move_sprite(4, 0, 0);
+				move_sprite(5, 0, 0);
+				move_sprite(6, 0, 0);
+				move_sprite(7, 0, 0);
+				move_sprite(8, 0, 0);
+				move_sprite(9, 0, 0);
+				move_sprite(10, 0, 0);
+				move_sprite(11, 0, 0);
+				move_sprite(12, 0, 0);
+				move_sprite(13, 0, 0);
+				move_sprite(14, 0, 0);
+				move_sprite(15, 0, 0);
+				move_sprite(16, 0, 0);
+				move_sprite(17, 0, 0);
+				move_sprite(18, 0, 0);
+				move_sprite(19, 0, 0);
+				fadeOut();
+				posy = 32;
+				posx = 80;
+				fadeIn();
 			}
 		}
-
 
 		if (map[currentLevelY - 1][currentLevelX] == 0) {
 			move_sprite(0, 0, 0);//door up
