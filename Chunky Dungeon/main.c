@@ -6,12 +6,20 @@
 #include "Splash/Splashscreen_data.c"
 #include "Splash/Splashscreen_map.c"
 
+#include "monsters/zombie_background_data.c"
+#include "monsters/zombie_background_map.c"
+
 #include "sprites/door.c"
 #include "sprites/doorLeft.c"
 #include "sprites/heroSide.c"
 #include "sprites/heroIdle.c"
 #include "sprites/heroDown.c"
 #include "sprites/heroUp.c"
+#include "sprites/pointer.c"
+#include "sprites/heart.c"
+
+UINT8 health = 3;
+UINT8 dmg = 3;
 
 void pdelay(UINT8 numloops) {
 	UINT8 i;
@@ -20,7 +28,7 @@ void pdelay(UINT8 numloops) {
 	}
 }
 
-BOOLEAN canWalk(UINT8 direction, UINT8 posx, UINT8 posy){
+UBYTE canWalk(UINT8 direction, UINT8 posx, UINT8 posy){
 	if(direction==0){
 		if(posy<=32){
 			return 0;
@@ -108,24 +116,79 @@ void fadeIn() {
 	pdelay(10);
 }
 
-void main() {
+void fight() {
+	UINT8 posx = 32;
+	UBYTE right = 0;
+	UINT8 enemyhp = 12;
 
+	set_bkg_tiles(0, 0, 20, 18, zombie_background_map);
+	set_bkg_data(0, 94, zombie_background_data);
+	fadeIn();
+	pdelay(10);
+	set_sprite_tile(20, 52);
+	set_sprite_tile(21, 53);
+	set_sprite_tile(22, 52);
+	set_sprite_prop(22, S_FLIPY);
+	while (enemyhp > 10) {
+		if (right) {
+			posx++;
+		}
+		else {
+			posx--;
+		}
+		if (posx > 144) {
+			right = 0;
+		}
+		if (posx < 24) {
+			right = 1;
+		}
+		move_sprite(20, posx, 116);
+		move_sprite(21, posx, 124);
+		move_sprite(22, posx, 132);
+		
+		if (joypad() & J_A) {
+			if (posx < 88 && posx >76) {
+				enemyhp = enemyhp - dmg;
+			}else if(posx < 92 && posx >80){
+				enemyhp = enemyhp - dmg+1;
+			}else{
+				enemyhp--;
+			}
+		}
+		pdelay(1);
+	}
+	move_sprite(20, 0, 0);
+	move_sprite(21, 0, 0);
+	move_sprite(22, 0, 0);
+	fadeOut();
+	set_bkg_data(0, 22, background_data);
+	set_bkg_tiles(0, 0, 20, 18, background_map);
+}
+
+void clearsprites(UINT8 times) {
+	UINT8 i = 0;
+	for (i; i <= times; i++) {
+		move_sprite(i, 0, 0);
+	}
+}
+void main() {
+	
 
 	UINT8 posx = 80;
 	UINT8 posy = 88;
 	UINT8 spriteindex = 6;
 	UINT8 direction = 2;
-	BOOLEAN playIdle = 0;
+	UBYTE playIdle = 0;
 	UINT8 currentLevelX = 3;
 	UINT8 currentLevelY = 5;
 
 	UINT8 map[][]={
-		{0,0,0,0,0,0,0},
-		{0,2,0,1,0,0,0},
-		{0,1,1,1,1,1,0},
-		{0,0,1,0,0,1,0},
-		{0,1,1,1,1,1,0},
-		{0,0,0,1,0,0,0},
+		{0,0,0,0,0,0,0},// 5 - boss
+		{0,5,0,1,0,0,0},// 2 - walka
+		{0,1,1,1,1,1,0},//
+		{0,0,1,0,0,1,0},//
+		{0,1,2,2,1,2,0},//
+		{0,0,0,1,0,0,0},//
 		{0,0,0,0,0,0,0}
 	};
 
@@ -152,6 +215,8 @@ void main() {
 	set_sprite_data(20, 16, heroIdle);
 	set_sprite_data(36, 8, heroDown);
 	set_sprite_data(44, 8, heroUp);
+	set_sprite_data(52, 2, pointer);
+	set_sprite_data(54, 2, heart);
 
 	set_sprite_tile(0, 0);//door up
 	set_sprite_tile(1, 1);
@@ -242,7 +307,7 @@ void main() {
 	}
 
 
-while (1) {
+while (health > 0) {
 	if (spriteindex == 40) {
 		spriteindex = 0;
 	}
@@ -488,27 +553,12 @@ while (1) {
 		if (whereStandingDoor(posx, posy) == 0) {
 			if (map[currentLevelY - 1][currentLevelX] != 0) {
 				currentLevelY--;
-				move_sprite(0, 0, 0);
-				move_sprite(1, 0, 0);
-				move_sprite(2, 0, 0);
-				move_sprite(3, 0, 0);
-				move_sprite(4, 0, 0);
-				move_sprite(5, 0, 0);
-				move_sprite(6, 0, 0);
-				move_sprite(7, 0, 0);
-				move_sprite(8, 0, 0);
-				move_sprite(9, 0, 0);
-				move_sprite(10, 0, 0);
-				move_sprite(11, 0, 0);
-				move_sprite(12, 0, 0);
-				move_sprite(13, 0, 0);
-				move_sprite(14, 0, 0);
-				move_sprite(15, 0, 0);
-				move_sprite(16, 0, 0);
-				move_sprite(17, 0, 0);
-				move_sprite(18, 0, 0);
-				move_sprite(19, 0, 0);
+				clearsprites(19);
 				fadeOut();
+				if (map[currentLevelY][currentLevelX] == 2) {
+					fight();
+					map[currentLevelY][currentLevelX] = 1;
+				}
 				posy = 128;
 				posx = 80;
 				fadeIn();
@@ -517,27 +567,12 @@ while (1) {
 		else if (whereStandingDoor(posx, posy) == 1) {
 			if (map[currentLevelY][currentLevelX - 1] != 0) {
 				currentLevelX--;
-				move_sprite(0, 0, 0);
-				move_sprite(1, 0, 0);
-				move_sprite(2, 0, 0);
-				move_sprite(3, 0, 0);
-				move_sprite(4, 0, 0);
-				move_sprite(5, 0, 0);
-				move_sprite(6, 0, 0);
-				move_sprite(7, 0, 0);
-				move_sprite(8, 0, 0);
-				move_sprite(9, 0, 0);
-				move_sprite(10, 0, 0);
-				move_sprite(11, 0, 0);
-				move_sprite(12, 0, 0);
-				move_sprite(13, 0, 0);
-				move_sprite(14, 0, 0);
-				move_sprite(15, 0, 0);
-				move_sprite(16, 0, 0);
-				move_sprite(17, 0, 0);
-				move_sprite(18, 0, 0);
-				move_sprite(19, 0, 0);
+				clearsprites(19);
 				fadeOut();
+				if (map[currentLevelY][currentLevelX] == 2) {
+					fight();
+					map[currentLevelY][currentLevelX] = 1;
+				}
 				posy = 80;
 				posx = 136;
 				fadeIn();
@@ -546,27 +581,12 @@ while (1) {
 		else if (whereStandingDoor(posx, posy) == 2) {
 			if (map[currentLevelY ][currentLevelX + 1] != 0) {
 				currentLevelX++;
-				move_sprite(0, 0, 0);
-				move_sprite(1, 0, 0);
-				move_sprite(2, 0, 0);
-				move_sprite(3, 0, 0);
-				move_sprite(4, 0, 0);
-				move_sprite(5, 0, 0);
-				move_sprite(6, 0, 0);
-				move_sprite(7, 0, 0);
-				move_sprite(8, 0, 0);
-				move_sprite(9, 0, 0);
-				move_sprite(10, 0, 0);
-				move_sprite(11, 0, 0);
-				move_sprite(12, 0, 0);
-				move_sprite(13, 0, 0);
-				move_sprite(14, 0, 0);
-				move_sprite(15, 0, 0);
-				move_sprite(16, 0, 0);
-				move_sprite(17, 0, 0);
-				move_sprite(18, 0, 0);
-				move_sprite(19, 0, 0);
+				clearsprites(19);
 				fadeOut();
+				if (map[currentLevelY][currentLevelX] == 2) {
+					fight();
+					map[currentLevelY][currentLevelX] = 1;
+				}
 				posy = 80;
 				posx = 24;
 				fadeIn();
@@ -575,27 +595,12 @@ while (1) {
 		else if (whereStandingDoor(posx, posy) == 3) {
 			if (map[currentLevelY + 1][currentLevelX] != 0) {
 				currentLevelY++;
-				move_sprite(0, 0, 0);
-				move_sprite(1, 0, 0);
-				move_sprite(2, 0, 0);
-				move_sprite(3, 0, 0);
-				move_sprite(4, 0, 0);
-				move_sprite(5, 0, 0);
-				move_sprite(6, 0, 0);
-				move_sprite(7, 0, 0);
-				move_sprite(8, 0, 0);
-				move_sprite(9, 0, 0);
-				move_sprite(10, 0, 0);
-				move_sprite(11, 0, 0);
-				move_sprite(12, 0, 0);
-				move_sprite(13, 0, 0);
-				move_sprite(14, 0, 0);
-				move_sprite(15, 0, 0);
-				move_sprite(16, 0, 0);
-				move_sprite(17, 0, 0);
-				move_sprite(18, 0, 0);
-				move_sprite(19, 0, 0);
+				clearsprites(19);
 				fadeOut();
+				if (map[currentLevelY][currentLevelX] == 2) {
+					fight();
+					map[currentLevelY][currentLevelX] = 1;
+				}
 				posy = 32;
 				posx = 80;
 				fadeIn();
@@ -657,4 +662,6 @@ while (1) {
 	spriteindex++;
 	pdelay(1);
 }
+
+
 }

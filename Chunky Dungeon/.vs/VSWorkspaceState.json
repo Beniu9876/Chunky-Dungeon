@@ -2,9 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\backgrounds",
+    "\\monsters",
     "\\Splash",
     "\\sprites"
   ],
-  "SelectedNode": "\\Splash\\Splashscreen_data.c",
+  "SelectedNode": "\\monsters\\zombie_background_data.c",
   "PreviewInSolutionExplorer": false
 }
