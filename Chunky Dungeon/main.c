@@ -1,6 +1,7 @@
 #include <gb/gb.h>
 #include <stdio.h>
 #include <gb/font.h>
+#include <time.h>
 #include "backgrounds/background_data.c"
 #include "backgrounds/background_map.c"
 #include "Splash/Splashscreen_data.c"
@@ -17,9 +18,9 @@
 #include "sprites/heroUp.c"
 #include "sprites/pointer.c"
 #include "sprites/heart.c"
+#include "sprites/oneTwoThree.c"
 
 UINT8 health = 3;
-UINT8 dmg = 3;
 
 void pdelay(UINT8 numloops) {
 	UINT8 i;
@@ -118,9 +119,11 @@ void fadeIn() {
 
 void fight() {
 	UINT8 posx = 32;
+	UINT8 randx = 80;
+	UINT8 posy = 50;
 	UBYTE right = 0;
-	UINT8 enemyhp = 12;
-
+	UINT8 enemyhp = 15;
+	UBYTE canAttack = 1;
 	set_bkg_tiles(0, 0, 20, 18, zombie_background_map);
 	set_bkg_data(0, 94, zombie_background_data);
 	fadeIn();
@@ -138,23 +141,45 @@ void fight() {
 		}
 		if (posx > 144) {
 			right = 0;
+			canAttack = 1;
 		}
 		if (posx < 24) {
 			right = 1;
+			canAttack = 1;
+		}
+		if(posy < 50){
+			randx=0;
+			posy=100;
 		}
 		move_sprite(20, posx, 116);
 		move_sprite(21, posx, 124);
 		move_sprite(22, posx, 132);
-		
-		if (joypad() & J_A) {
-			if (posx < 88 && posx >76) {
-				enemyhp = enemyhp - dmg;
-			}else if(posx < 92 && posx >80){
-				enemyhp = enemyhp - dmg+1;
+		move_sprite(23, randx, posy);
+		if ((joypad() & J_A) && (canAttack)) {
+			if (posx < 88 && posx > 80) {
+				enemyhp = enemyhp - 3;
+				set_sprite_tile(23, 58);
+				posy = 100;
+				//randx = rand() % 70 + 20;
+				randx = 80;
+
+			}else if(posx < 92 && posx > 84){
+				enemyhp = enemyhp - 2;
+				set_sprite_tile(23, 57);
+				posy = 100;
+				//randx = rand() % 70 + 20;
+				randx = 80;
 			}else{
 				enemyhp--;
+				set_sprite_tile(23, 56);
+				posy = 100;
+				//initrand(143);
+				//randx = rand();
+				randx = 80;
 			}
+			canAttack = 0;
 		}
+		posy--;
 		pdelay(1);
 	}
 	move_sprite(20, 0, 0);
@@ -217,6 +242,7 @@ void main() {
 	set_sprite_data(44, 8, heroUp);
 	set_sprite_data(52, 2, pointer);
 	set_sprite_data(54, 2, heart);
+	set_sprite_data(56, 3, oneTwoThree);
 
 	set_sprite_tile(0, 0);//door up
 	set_sprite_tile(1, 1);
