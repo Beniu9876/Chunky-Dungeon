@@ -20,7 +20,7 @@
 #include "sprites/heart.c"
 #include "sprites/oneTwoThree.c"
 
-UINT8 health = 3;
+UINT8 hp = 3;
 
 void pdelay(UINT8 numloops) {
 	UINT8 i;
@@ -118,11 +118,11 @@ void fadeIn() {
 }
 
 void fight() {
-	UINT8 posx = 32;
-	UINT8 randx = 80;
+	UINT8 posx = 24;
+	UINT8 posxhit = 80;
 	UINT8 posy = 50;
-	UBYTE right = 0;
-	UINT8 enemyhp = 15;
+	UBYTE right = 1;
+	UINT8 enemyhp = 13;
 	UBYTE canAttack = 1;
 	set_bkg_tiles(0, 0, 20, 18, zombie_background_map);
 	set_bkg_data(0, 94, zombie_background_data);
@@ -132,7 +132,24 @@ void fight() {
 	set_sprite_tile(21, 53);
 	set_sprite_tile(22, 52);
 	set_sprite_prop(22, S_FLIPY);
-	while (enemyhp > 10) {
+	move_sprite(24, 10, 144);
+	move_sprite(25, 20, 144);
+	move_sprite(26, 30, 144);
+	while (enemyhp > 10 && hp > 0) {
+		if(hp==3){
+			set_sprite_tile(24, 54);
+			set_sprite_tile(25, 54);
+			set_sprite_tile(26, 54);
+		}else if(hp==2){
+			set_sprite_tile(24, 54);
+			set_sprite_tile(25, 54);
+			set_sprite_tile(26, 55);
+		}else if(hp==1){
+			set_sprite_tile(24, 54);
+			set_sprite_tile(25, 55);
+			set_sprite_tile(26, 55);
+		}
+
 		if (right) {
 			posx++;
 		}
@@ -142,40 +159,39 @@ void fight() {
 		if (posx > 144) {
 			right = 0;
 			canAttack = 1;
+			hp--;
 		}
 		if (posx < 24) {
 			right = 1;
 			canAttack = 1;
+			hp--;
 		}
 		if(posy < 50){
-			randx=0;
+			posxhit=0;
 			posy=100;
 		}
 		move_sprite(20, posx, 116);
 		move_sprite(21, posx, 124);
 		move_sprite(22, posx, 132);
-		move_sprite(23, randx, posy);
+		move_sprite(23, posxhit, posy);
 		if ((joypad() & J_A) && (canAttack)) {
 			if (posx < 88 && posx > 80) {
 				enemyhp = enemyhp - 3;
 				set_sprite_tile(23, 58);
+				posxhit = (posy%10)*4+72;
 				posy = 100;
-				//randx = rand() % 70 + 20;
-				randx = 80;
 
 			}else if(posx < 92 && posx > 84){
 				enemyhp = enemyhp - 2;
 				set_sprite_tile(23, 57);
+				posxhit = (posy%10)*4+72;
 				posy = 100;
-				//randx = rand() % 70 + 20;
-				randx = 80;
+				
 			}else{
 				enemyhp--;
 				set_sprite_tile(23, 56);
+				posxhit = (posy%10)*4+72;
 				posy = 100;
-				//initrand(143);
-				//randx = rand();
-				randx = 80;
 			}
 			canAttack = 0;
 		}
@@ -333,7 +349,7 @@ void main() {
 	}
 
 
-while (health > 0) {
+while (hp > 0) {
 	if (spriteindex == 40) {
 		spriteindex = 0;
 	}
