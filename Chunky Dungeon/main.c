@@ -225,7 +225,47 @@ void fight() {
     set_bkg_data(0, 22, background_data);
     set_bkg_tiles(0, 0, 20, 18, background_map);
 }
+/*
+void playMusic() {
+    NR52_REG = 0x80;
+    NR50_REG = 0x77;
+    NR51_REG = 0xff;
+    
+    //7 - unused
+    //6-4 - sweep time (if 0, off)
+    //3 - sweep direction (if 0, increase, if 1, decrease)
+    //2-0 - sweep RtShift amount (if 0, off)
+    //0 000 0 000
+    NR10_REG = 0x16;
+    //
+    //
+    //7-6 - wave pattern duty cycle(0-3 = 12.5%, 25%, 50%, 75%)
+    //5-0 sound length
+    //00 000000
+    NR11_REG = 0x40;
+    //
+    //7-4 - channel volume
+    //3 - volume sweep direction(0:down, 1:up)
+    //2-0 - length of each step in sweep(if 0, off)
+    //note: wach step is n/64 seconds long, where n is 1-7
+    //0000 0 000
+    NR12_REG = 0x73;
+    //
+    //
+    //
+    NR13_REG = 0x00;
+    //7 - initialize
+    //6 - consecutive select/length
+    //5-3 - unused
+    //2-0 - 3 most significant bits of frequency
+    //0 0 000 000
+    //
+    NR14_REG = 0xc3;
 
+    pdelay(30);
+
+}
+*/
 void main() {
 
     UINT8 posx = 80;
@@ -246,10 +286,14 @@ void main() {
       {0,0,0,0,0,0,0}
     };
 
-    set_bkg_data(0, 180, Splashscreen_data);
+    set_bkg_data(0, 227, Splashscreen_data);
     set_bkg_tiles(0, 0, 20, 18, Splashscreen_map);
     SHOW_BKG;
     DISPLAY_ON;
+
+    //playMusic();
+
+    
     waitpad(J_START);
     fadeOut();
 
@@ -306,8 +350,6 @@ void main() {
     set_sprite_tile(19, 11);
 
     //SHOW_WIN;
-    SHOW_BKG;
-    DISPLAY_ON;
     SHOW_SPRITES;
 
     if (map[currentLevelY - 1][currentLevelX] == 0) {
@@ -347,6 +389,11 @@ void main() {
         move_sprite(7, 16, 88);
     }
 
+    
+
+
+
+    
     while (hp > 0) {
         if (spriteindex == 40) {
             spriteindex = 0;
@@ -689,5 +736,5 @@ void main() {
         spriteindex++;
         pdelay(1);
     }
-
+    
 }
